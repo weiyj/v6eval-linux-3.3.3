@@ -571,6 +571,42 @@ _FEM_icmp4(EchoReply,_pNAME,_pETHER,_oHDR_IPV4,_oICMPV4_EchoReply)
 #define FEM_icmp4_echo_reply_exth(_pNAME,_pETHER,_oHDR_IPV4,_oPACKET_IPV4, _oICMPV4_EchoReply) \
 _FEM_icmp4_exth(EchoReply,_pNAME,_pETHER,_oHDR_IPV4,_oPACKET_IPV4, _oICMPV4_EchoReply)
 
+//----------------------------------------------------------------------
+// FEM_icmp4_timestamp_request
+
+#define FEM_icmp4_timestamp_request(_pNAME,_pETHER,_oHDR_IPV4,_oICMPV4_TimestampRequest) \
+_FEM_icmp4(TimestampRequest,_pNAME,_pETHER,_oHDR_IPV4,_oICMPV4_TimestampRequest)
+
+#define FEM_icmp4_timestamp_request_exth(_pNAME,_pETHER,_oHDR_IPV4,_oPACKET_IPV4, _oICMPV4_TimestampRequest) \
+_FEM_icmp4_exth(TimestampRequest,_pNAME,_pETHER,_oHDR_IPV4,_oPACKET_IPV4, _oICMPV4_TimestampRequest)
+
+//---------------------------------------------------------------------
+// FEM_icmp4_timestamp_reply
+
+#define FEM_icmp4_timestamp_reply(_pNAME,_pETHER,_oHDR_IPV4,_oICMPV4_TimestampReply) \
+_FEM_icmp4(TimestampReply,_pNAME,_pETHER,_oHDR_IPV4,_oICMPV4_TimestampReply)
+
+#define FEM_icmp4_timestamp_reply_exth(_pNAME,_pETHER,_oHDR_IPV4,_oPACKET_IPV4, _oICMPV4_TimestampReply) \
+_FEM_icmp4_exth(TimestampReply,_pNAME,_pETHER,_oHDR_IPV4,_oPACKET_IPV4, _oICMPV4_TimestampReply)
+
+//---------------------------------------------------------------------
+// FEM_icmp4_address_mask_request
+
+#define FEM_icmp4_address_mask_request(_pNAME,_pETHER,_oHDR_IPV4,_oICMPV4_AddressMaskRequest) \
+_FEM_icmp4(AddressMaskRequest,_pNAME,_pETHER,_oHDR_IPV4,_oICMPV4_AddressMaskRequest)
+
+#define FEM_icmp4_address_mask_request_exth(_pNAME,_pETHER,_oHDR_IPV4,_oPACKET_IPV4, _oICMPV4_AddressMaskRequest) \
+_FEM_icmp4_exth(AddressMaskRequest,_pNAME,_pETHER,_oHDR_IPV4,_oPACKET_IPV4, _oICMPV4_AddressMaskRequest)
+
+//---------------------------------------------------------------------
+// FEM_icmp4_address_mask_reply
+
+#define FEM_icmp4_address_mask_reply(_pNAME,_pETHER,_oHDR_IPV4,_oICMPV4_AddressMaskReply) \
+_FEM_icmp4(AddressMaskReply,_pNAME,_pETHER,_oHDR_IPV4,_oICMPV4_AddressMaskReply)
+
+#define FEM_icmp4_address_mask_reply_exth(_pNAME,_pETHER,_oHDR_IPV4,_oPACKET_IPV4, _oICMPV4_AddressMaskReply) \
+_FEM_icmp4_exth(AddressMaskReply,_pNAME,_pETHER,_oHDR_IPV4,_oPACKET_IPV4, _oICMPV4_AddressMaskReply)
+
 //---------------------------------------------------------------------
 // FEM_icmp4_destination_unreachable
 
@@ -588,6 +624,15 @@ _FEM_icmp4(TimeExceeded,_pNAME,_pETHER,_oHDR_IPV4,_oICMPV4_TimeExceeded)
 
 #define FEM_icmp4_time_exceeded_exth(_pNAME,_pETHER,_oHDR_IPV4,_oPACKET_IPV4, _oICMPV4_TimeExceeded) \
 _FEM_icmp4_exth(TimeExceeded,_pNAME,_pETHER,_oHDR_IPV4,_oPACKET_IPV4, _oICMPV4_TimeExceeded)
+
+//---------------------------------------------------------------------
+// FEM_icmp4_source_quench
+
+#define FEM_icmp4_source_quench(_pNAME,_pETHER,_oHDR_IPV4,_oICMPV4_SourceQuench) \
+_FEM_icmp4(SourceQuench,_pNAME,_pETHER,_oHDR_IPV4,_oICMPV4_SourceQuench)
+
+#define FEM_icmp4_source_quench_exth(_pNAME,_pETHER,_oHDR_IPV4,_oPACKET_IPV4, _oICMPV4_SourceQuench) \
+_FEM_icmp4_exth(SourceQuench,_pNAME,_pETHER,_oHDR_IPV4,_oPACKET_IPV4, _oICMPV4_SourceQuench)
 
 //---------------------------------------------------------------------
 //end

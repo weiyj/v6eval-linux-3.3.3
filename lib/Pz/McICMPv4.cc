@@ -130,6 +130,10 @@ McUpp_ICMPv4_DestinationUnreachable::McUpp_ICMPv4_DestinationUnreachable(CSTR ke
 McUpp_ICMPv4_DestinationUnreachable::~McUpp_ICMPv4_DestinationUnreachable(){}
 
 //////////////////////////////////////////////////////////////////////////////
+McUpp_ICMPv4_SourceQuench::McUpp_ICMPv4_SourceQuench(CSTR key):McUpp_ICMPv4(key){}
+McUpp_ICMPv4_SourceQuench::~McUpp_ICMPv4_SourceQuench(){}
+
+//////////////////////////////////////////////////////////////////////////////
 McUpp_ICMPv4_TimeExceeded::McUpp_ICMPv4_TimeExceeded(CSTR key):McUpp_ICMPv4(key){}
 McUpp_ICMPv4_TimeExceeded::~McUpp_ICMPv4_TimeExceeded(){}
 

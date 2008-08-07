@@ -54,10 +54,15 @@
 //ICMPv4 Type
 const int32_t TP_ICMPv4_EchoReply		=0;
 const int32_t TP_ICMPv4_DestinationUnreachable	=3;
+const int32_t TP_ICMPv4_SourceQuench		=4;
 const int32_t TP_ICMPv4_Redirect		=5;
 const int32_t TP_ICMPv4_EchoRequest		=8;
 const int32_t TP_ICMPv4_TimeExceeded		=11;
 const int32_t TP_ICMPv4_ParameterProblem	=12;
+const int32_t TP_ICMPv4_TimestampRequest	=13;
+const int32_t TP_ICMPv4_TimestampReply		=14;
+const int32_t TP_ICMPv4_AddressMaskRequest	=17;
+const int32_t TP_ICMPv4_AddressMaskReply	=18;
 
 
 // meta ICMPv4 only one (reverse upptype(one)->icmptype(any) McUpp_ICMPv4_*}
@@ -110,6 +115,14 @@ static	McUpp_ICMPv4_DestinationUnreachable* create(CSTR);
 	int32_t icmpv4Type()const{return TP_ICMPv4_DestinationUnreachable;}
 };
 
+class McUpp_ICMPv4_SourceQuench :public McUpp_ICMPv4{
+public:
+	McUpp_ICMPv4_SourceQuench(CSTR);
+virtual	~McUpp_ICMPv4_SourceQuench();
+static	McUpp_ICMPv4_SourceQuench* create(CSTR);
+	int32_t icmpv4Type()const{return TP_ICMPv4_SourceQuench;}
+};
+
 class McUpp_ICMPv4_TimeExceeded :public McUpp_ICMPv4{
 public:
 	McUpp_ICMPv4_TimeExceeded(CSTR);
@@ -148,6 +161,38 @@ class McUpp_ICMPv4_EchoReply: public McUpp_ICMPv4 {
 		~McUpp_ICMPv4_EchoReply() {}
 		static McUpp_ICMPv4_EchoReply *create(CSTR);
 		int32_t icmpv4Type() const {return(TP_ICMPv4_EchoReply);}
+};
+
+class McUpp_ICMPv4_TimestampRequest: public McUpp_ICMPv4 {
+	public:
+		McUpp_ICMPv4_TimestampRequest(CSTR key): McUpp_ICMPv4(key) {}
+		~McUpp_ICMPv4_TimestampRequest() {}
+		static McUpp_ICMPv4_TimestampRequest *create(CSTR);
+		int32_t icmpv4Type() const {return(TP_ICMPv4_TimestampRequest);}
+};
+
+class McUpp_ICMPv4_TimestampReply: public McUpp_ICMPv4 {
+	public:
+		McUpp_ICMPv4_TimestampReply(CSTR key): McUpp_ICMPv4(key) {}
+		~McUpp_ICMPv4_TimestampReply() {}
+		static McUpp_ICMPv4_TimestampReply *create(CSTR);
+		int32_t icmpv4Type() const {return(TP_ICMPv4_TimestampReply);}
+};
+
+class McUpp_ICMPv4_AddressMaskRequest: public McUpp_ICMPv4 {
+	public:
+		McUpp_ICMPv4_AddressMaskRequest(CSTR key): McUpp_ICMPv4(key) {}
+		~McUpp_ICMPv4_AddressMaskRequest() {}
+		static McUpp_ICMPv4_AddressMaskRequest *create(CSTR);
+		int32_t icmpv4Type() const {return(TP_ICMPv4_AddressMaskRequest);}
+};
+
+class McUpp_ICMPv4_AddressMaskReply: public McUpp_ICMPv4 {
+	public:
+		McUpp_ICMPv4_AddressMaskReply(CSTR key): McUpp_ICMPv4(key) {}
+		~McUpp_ICMPv4_AddressMaskReply() {}
+		static McUpp_ICMPv4_AddressMaskReply *create(CSTR);
+		int32_t icmpv4Type() const {return(TP_ICMPv4_AddressMaskReply);}
 };
 
 //////////////////////////////////////////////////////////////////////////////

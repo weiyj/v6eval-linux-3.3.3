@@ -254,15 +254,20 @@ McObject::initialize()
 	LEXADD(McOpt_MH_MobNetworkPrefix,	"Opt_MH_MobNetworkPrefix");
 
 	//ICMPv4
-	LEXADD(McUpp_ICMPv4_ANY,			"ICMPv4_ANY" );
+	LEXADD(McUpp_ICMPv4_ANY,		"ICMPv4_ANY" );
 	LEXADD(McUpp_ICMPv4_DestinationUnreachable,
 		"ICMPv4_DestinationUnreachable" );
 
+	LEXADD(McUpp_ICMPv4_SourceQuench,	"ICMPv4_SourceQuench" );
 	LEXADD(McUpp_ICMPv4_TimeExceeded,	"ICMPv4_TimeExceeded" );
 	LEXADD(McUpp_ICMPv4_ParameterProblem,	"ICMPv4_ParameterProblem" );
 	LEXADD(McUpp_ICMPv4_Redirect,	 	"ICMPv4_Redirect" );
 	LEXADD(McUpp_ICMPv4_EchoRequest,	"ICMPv4_EchoRequest" );
 	LEXADD(McUpp_ICMPv4_EchoReply,		"ICMPv4_EchoReply" );
+	LEXADD(McUpp_ICMPv4_TimestampRequest,	"ICMPv4_TimestampRequest" );
+	LEXADD(McUpp_ICMPv4_TimestampReply,	"ICMPv4_TimestampReply" );
+	LEXADD(McUpp_ICMPv4_AddressMaskRequest,	"ICMPv4_AddressMaskRequest" );
+	LEXADD(McUpp_ICMPv4_AddressMaskReply,	"ICMPv4_AddressMaskReply" );
 
 	//IGMP
 	LEXADD(McUpp_IGMP_ANY,			"IGMP_ANY" );
@@ -1862,6 +1867,16 @@ McUpp_ICMPv4_DestinationUnreachable* McUpp_ICMPv4_DestinationUnreachable::create
 	return mc;}
 
 //////////////////////////////////////////////////////////////////////////////
+McUpp_ICMPv4_SourceQuench* McUpp_ICMPv4_SourceQuench::create(CSTR key){
+	McUpp_ICMPv4_SourceQuench* mc = new McUpp_ICMPv4_SourceQuench(key);
+	mc->common_member();
+	mc->member( new MmUint( "Unused",	32,	UN(0),	UN(0) ) );
+	mc->member( new MmPayload( "payload" ) );
+	//dict
+	MmHeader_onICMPv4::add(mc);		//Upp_ICMPv4::header= (upper=)
+	return mc;}
+
+//////////////////////////////////////////////////////////////////////////////
 McUpp_ICMPv4_TimeExceeded* McUpp_ICMPv4_TimeExceeded::create(CSTR key){
 	McUpp_ICMPv4_TimeExceeded* mc = new McUpp_ICMPv4_TimeExceeded(key);
 	mc->common_member();
@@ -1910,6 +1925,52 @@ McUpp_ICMPv4_EchoReply *McUpp_ICMPv4_EchoReply::create(CSTR key) {
 	mc->member( new MmUint( "Identifier",	16,	UN(0),	UN(0) ) );
 	mc->member( new MmUint( "SequenceNumber",16,	UN(0),	UN(0) ) );
 	mc->member( new MmPayload( "payload" ) );
+	//dict
+	MmHeader_onICMPv4::add(mc);		//Upp_ICMPv4::header= (upper=)
+	return mc;}
+
+//////////////////////////////////////////////////////////////////////////////
+McUpp_ICMPv4_TimestampRequest *McUpp_ICMPv4_TimestampRequest::create(CSTR key) {
+	McUpp_ICMPv4_TimestampRequest *mc = new McUpp_ICMPv4_TimestampRequest(key);
+	mc->common_member();
+	mc->member( new MmUint( "Identifier",	16,	UN(0),	UN(0) ) );
+	mc->member( new MmUint( "SequenceNumber",16,	UN(0),	UN(0) ) );
+	mc->member( new MmUint( "OriginateTimestamp",32,UN(0),	EVALANY() ) );
+	mc->member( new MmUint( "ReceiveTimestamp",32,	UN(0),	EVALANY() ) );
+	mc->member( new MmUint( "TransmitTimestamp",32,	UN(0),	EVALANY() ) );
+	//dict
+	MmHeader_onICMPv4::add(mc);		//Upp_ICMPv4::header= (upper=)
+	return mc;}
+
+McUpp_ICMPv4_TimestampReply *McUpp_ICMPv4_TimestampReply::create(CSTR key) {
+	McUpp_ICMPv4_TimestampReply *mc = new McUpp_ICMPv4_TimestampReply(key);
+	mc->common_member();
+	mc->member( new MmUint( "Identifier",	16,	UN(0),	UN(0) ) );
+	mc->member( new MmUint( "SequenceNumber",16,	UN(0),	UN(0) ) );
+	mc->member( new MmUint( "OriginateTimestamp",32,UN(0),	EVALANY() ) );
+	mc->member( new MmUint( "ReceiveTimestamp",32,	UN(0),	EVALANY() ) );
+	mc->member( new MmUint( "TransmitTimestamp",32,	UN(0),	EVALANY() ) );
+	//dict
+	MmHeader_onICMPv4::add(mc);		//Upp_ICMPv4::header= (upper=)
+	return mc;}
+
+//////////////////////////////////////////////////////////////////////////////
+McUpp_ICMPv4_AddressMaskRequest *McUpp_ICMPv4_AddressMaskRequest::create(CSTR key) {
+	McUpp_ICMPv4_AddressMaskRequest *mc = new McUpp_ICMPv4_AddressMaskRequest(key);
+	mc->common_member();
+	mc->member( new MmUint( "Identifier",	16,	UN(0),	UN(0) ) );
+	mc->member( new MmUint( "SequenceNumber",16,	UN(0),	UN(0) ) );
+	mc->member( new MmV4Addr( "AddressMask",       	UN(0),	EVALANY() ) );
+	//dict
+	MmHeader_onICMPv4::add(mc);		//Upp_ICMPv4::header= (upper=)
+	return mc;}
+
+McUpp_ICMPv4_AddressMaskReply *McUpp_ICMPv4_AddressMaskReply::create(CSTR key) {
+	McUpp_ICMPv4_AddressMaskReply *mc = new McUpp_ICMPv4_AddressMaskReply(key);
+	mc->common_member();
+	mc->member( new MmUint( "Identifier",	16,	UN(0),	UN(0) ) );
+	mc->member( new MmUint( "SequenceNumber",16,	UN(0),	UN(0) ) );
+	mc->member( new MmV4Addr( "AddressMask",       	UN(0),	EVALANY() ) );
 	//dict
 	MmHeader_onICMPv4::add(mc);		//Upp_ICMPv4::header= (upper=)
 	return mc;}
