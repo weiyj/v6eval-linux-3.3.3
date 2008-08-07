@@ -658,6 +658,13 @@ _FEM_igmp(IGMPQuery,_pNAME,_pETHER,_oHDR_IPV4,_oIGMP_IGMPQUERY)
 #define FEM_igmp_igmpquery_exth(_pNAME,_pETHER,_oHDR_IPV4,_oPACKET_IPV4,_oIGMP_IGMPQUERY) \
 _FEM_igmp_exth(IGMPQuery,_pNAME,_pETHER,_oHDR_IPV4,_oPACKET_IPV4,_oIGMP_IGMPQUERY)
 //---------------------------------------------------------------------
+// FEM_igmp_igmpv3query
+#define FEM_igmp_igmpv3query(_pNAME,_pETHER,_oHDR_IPV4,_oIGMP_IGMPQUERY) \
+_FEM_igmp(IGMPv3Query,_pNAME,_pETHER,_oHDR_IPV4,_oIGMP_IGMPQUERY)
+
+#define FEM_igmp_igmpv3query_exth(_pNAME,_pETHER,_oHDR_IPV4,_oPACKET_IPV4,_oIGMP_IGMPQUERY) \
+_FEM_igmp_exth(IGMPv3Query,_pNAME,_pETHER,_oHDR_IPV4,_oPACKET_IPV4,_oIGMP_IGMPQUERY)
+//---------------------------------------------------------------------
 // FEM_igmp_igmpv3report
 #define FEM_igmp_igmpv3report(_pNAME,_pETHER,_oHDR_IPV4,_oIGMP_IGMPV3REPORT) \
 _FEM_igmp(IGMPv3Report,_pNAME,_pETHER,_oHDR_IPV4,_oIGMP_IGMPV3REPORT)

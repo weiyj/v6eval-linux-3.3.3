@@ -103,6 +103,11 @@ bool McUpp_IGMP::overwrite_DictType(
 	//
 	const PvNumber* pv = (const PvNumber*)rtype->pvalue();
 	uint32_t typevalue = pv->value();
+
+	if (typevalue == TP_IGMP_IGMPQuery && buf.remainLength(at.bytes()) > 8) {
+		typevalue = typevalue | 0x80;
+	}
+
 	c.DictType().type_Set(typevalue);       //self Type set
 	delete rtype;
 	return true;}
@@ -128,13 +133,17 @@ McUpp_IGMP_ANY::McUpp_IGMP_ANY(CSTR key):McUpp_IGMP(key){}
 McUpp_IGMP_ANY::~McUpp_IGMP_ANY(){}
 
 //////////////////////////////////////////////////////////////////////////////
-#define IGMPV3OFFSET	12 // (Type Code Checksum MaxResponseCode Resv McastAddr ... NumOfSources ) = 28 Byte
-#define IGMPV3ADDRLEN	4 //address length
-
 McUpp_IGMP_IGMPQuery::McUpp_IGMP_IGMPQuery(CSTR key):McUpp_IGMP(key) {}
 McUpp_IGMP_IGMPQuery::~McUpp_IGMP_IGMPQuery() {}
 
-bool McUpp_IGMP_IGMPQuery::HCGENE(NumOfSources)(WControl &cntr, WObject *wmem, OCTBUF &buf) const {
+//////////////////////////////////////////////////////////////////////////////
+#define IGMPV3OFFSET	12 // (Type Code Checksum MaxResponseCode Resv McastAddr ... NumOfSources ) = 28 Byte
+#define IGMPV3ADDRLEN	4 //address length
+
+McUpp_IGMP_IGMPv3Query::McUpp_IGMP_IGMPv3Query(CSTR key):McUpp_IGMP(key) {}
+McUpp_IGMP_IGMPv3Query::~McUpp_IGMP_IGMPv3Query() {}
+
+bool McUpp_IGMP_IGMPv3Query::HCGENE(NumOfSources)(WControl &cntr, WObject *wmem, OCTBUF &buf) const {
 	WObject *wc = wmem->parent();
 	uint32_t reallen = wc->size().bytes();
 	uint32_t valulen = (reallen - IGMPV3OFFSET)/IGMPV3ADDRLEN;
@@ -142,7 +151,7 @@ bool McUpp_IGMP_IGMPQuery::HCGENE(NumOfSources)(WControl &cntr, WObject *wmem, O
 
 	return(def.generate(cntr, wmem, buf));
 }
-uint32_t McUpp_IGMP_IGMPQuery::HC_MLC(SourceAddress)(const ItPosition &at, OCTBUF &buf) const {
+uint32_t McUpp_IGMP_IGMPv3Query::HC_MLC(SourceAddress)(const ItPosition &at, OCTBUF &buf) const {
 	uint32_t length = (buf.remainLength(at.bytes()) - IGMPV3OFFSET) / IGMPV3ADDRLEN;
 	return(length);
 } 
@@ -183,6 +192,8 @@ MmHeader_onIGMP::~MmHeader_onIGMP(){}
 
 void MmHeader_onIGMP::add(McUpp_IGMP* mc){
 	dict_.add(mc->igmpType(),mc);}
+void MmHeader_onIGMP::add_igmp3(McUpp_IGMP* mc){
+	dict_.add(mc->igmpType() | 0x80,mc);}
 void MmHeader_onIGMP::add_other(McUpp_IGMP* mc){dict_.add_other(mc);}
 TypevsMcDict MmHeader_onIGMP::dict_;
 

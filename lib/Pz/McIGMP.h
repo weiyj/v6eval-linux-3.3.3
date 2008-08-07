@@ -122,6 +122,15 @@ virtual	~McUpp_IGMP_IGMPQuery();
 static	McUpp_IGMP_IGMPQuery* create(CSTR);
 	int32_t igmpType()const{return TP_IGMP_IGMPQuery;}
 
+};
+
+class McUpp_IGMP_IGMPv3Query :public McUpp_IGMP{
+public:
+	McUpp_IGMP_IGMPv3Query(CSTR);
+virtual	~McUpp_IGMP_IGMPv3Query();
+static	McUpp_IGMP_IGMPv3Query* create(CSTR);
+	int32_t igmpType()const{return TP_IGMP_IGMPQuery;}
+
 	//HardCording action method
 	DEC_HCGENE(NumOfSources);
 	DEC_HC_MLC(SourceAddress);
@@ -173,6 +182,7 @@ virtual ~MmHeader_onIGMP();
 	int32_t token()const{return metaToken(tkn_header_ref_);}
 	const TypevsMcDict* get_dict()const{return &dict_;}
 static	void add(McUpp_IGMP* mc);
+static	void add_igmp3(McUpp_IGMP* mc);
 static	void add_other(McUpp_IGMP* mc);
 // COMPOSE/REVERSE INTERFACE --------------------------------------------------
 	bool overwrite_DictType(RControl&,ItPosition& at,OCTBUF& buf)const;

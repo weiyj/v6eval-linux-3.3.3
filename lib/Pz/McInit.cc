@@ -272,6 +272,7 @@ McObject::initialize()
 	//IGMP
 	LEXADD(McUpp_IGMP_ANY,			"IGMP_ANY" );
 	LEXADD(McUpp_IGMP_IGMPQuery,		"IGMP_IGMPQuery" );
+	LEXADD(McUpp_IGMP_IGMPv3Query,		"IGMP_IGMPv3Query" );
 	LEXADD(McUpp_IGMP_IGMPv1Report,		"IGMP_IGMPv1Report" );
 	LEXADD(McUpp_IGMP_IGMPv2Report,		"IGMP_IGMPv2Report" );
 	LEXADD(McUpp_IGMP_IGMPv2LeaveGroup,	"IGMP_IGMPv2LeaveGroup" );
@@ -3448,26 +3449,32 @@ McUpp_IGMP_IGMPv3Report* McUpp_IGMP_IGMPv3Report::create(CSTR key){
 McUpp_IGMP_IGMPQuery* McUpp_IGMP_IGMPQuery::create(CSTR key){
 	McUpp_IGMP_IGMPQuery* mc = new McUpp_IGMP_IGMPQuery(key);
 	mc->common_member();
-	mc->member( new MmV4Addr( "GroupAddress",	MUST(),	MUST() ) );
+	mc->member(new MmV4Addr( "GroupAddress",	MUST(),	MUST() ) );
 	// ICMPv1 and IGMPv2 Query only have GroupAddress
-#ifndef NOT_USE_IGMPV3_QUERY
+	//dict
+	MmHeader_onIGMP::add(mc);		//Upp_IGMP::header= (upper=)
+	return mc;}
+//////////////////////////////////////////////////////////////////////////////
+McUpp_IGMP_IGMPv3Query* McUpp_IGMP_IGMPv3Query::create(CSTR key){
+	McUpp_IGMP_IGMPv3Query* mc = new McUpp_IGMP_IGMPv3Query(key);
+	mc->common_member();
+	mc->member(new MmV4Addr( "GroupAddress",	MUST(),	MUST() ) );
 	mc->member(new MmUint("Resv",		4,	UN(0),	UN(0)));
 	mc->member(new MmUint("SFlag",		1,	UN(0),	UN(0)));
 	mc->member(new MmUint("QRV",		3,	UN(0),	UN(0)));
 	mc->member(new MmUint("QQIC",		8,	UN(0),	UN(0)));
 	mc->member(
  		new MmUint( "NumOfSources",	16,
-			GENEHC(mc,McUpp_IGMP_IGMPQuery,NumOfSources),
+			GENEHC(mc,McUpp_IGMP_IGMPv3Query,NumOfSources),
  			EVALANY(),		ICVCONST() ) );
 	mc->member(
 		new MmMultiple(
 			new MmV4Addr("SourceAddress", MUST(), MUST()),
-			(METH_HC_MLC)&McUpp_IGMP_IGMPQuery::HC_MLC(SourceAddress)
+			(METH_HC_MLC)&McUpp_IGMP_IGMPv3Query::HC_MLC(SourceAddress)
 		)
 	);
-#endif	// NOT_USE_IGMPV3_QUERY
 	//dict
-	MmHeader_onIGMP::add(mc);		//Upp_IGMP::header= (upper=)
+	MmHeader_onIGMP::add_igmp3(mc);		//Upp_IGMP::header= (upper=)
 	return mc;}
 //////////////////////////////////////////////////////////////////////////////
 McUpp_IGMP_IGMPv1Report* McUpp_IGMP_IGMPv1Report::create(CSTR key){
@@ -4385,8 +4392,8 @@ McPld_ISAKMP_ID::common_member()
 #if 0
 	member(new MmUint("DOIspecificIDdata", 24, UN(0), UN(0)));
 #else
-	member(new MmUint("ProtocolID",	8, UN(0), UN(0)));
-	member(new MmUint("Port",	16, UN(0), UN(0)));
+	member(new MmUint("ProtoclID",          8, UN(0), UN(0)));
+	member(new MmUint("Port",              16, UN(0), UN(0)));
 #endif
 	return;
 }
