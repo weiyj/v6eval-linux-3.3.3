@@ -1777,7 +1777,9 @@ McTopHdr_TCP* McTopHdr_TCP::create(CSTR key){
 	mc->length_member(
 		    new MmUint( "DataOffset",	4,
 			GENEHC(mc,McTopHdr_TCP,DataOffset), EVALANY() ) );
-	mc->member( new MmUint( "Reserverd",	6,	UN(0),	UN(0) ) );
+	mc->member( new MmUint( "Reserverd",	4,	UN(0),	UN(0) ) );
+	mc->member( new MmUint( "CWRFlag",	1,	UN(0),	UN(0) ) );
+	mc->member( new MmUint( "ECEFlag",	1,	UN(0),	UN(0) ) );
 	mc->member( new MmUint( "URGFlag",	1,	UN(0),	UN(0) ) );
 	mc->member( new MmUint( "ACKFlag",	1,	UN(0),	UN(0) ) );
 	mc->member( new MmUint( "PSHFlag",	1,	UN(0),	UN(0) ) );

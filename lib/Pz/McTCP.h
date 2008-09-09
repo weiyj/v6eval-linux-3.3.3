@@ -89,6 +89,11 @@ virtual uint32_t Layerlength_for_reverse(RControl&,ItPosition&,OCTBUF&) const;
 const int32_t TP_Opt_TCP_EndofOptionList	= 0;
 const int32_t TP_Opt_TCP_NoOperation		= 1;
 const int32_t TP_Opt_TCP_MaximumSegmentSize	= 2;
+const int32_t TP_Opt_TCP_WindowScale		= 3;
+const int32_t TP_Opt_TCP_SackPermitted		= 4;
+const int32_t TP_Opt_TCP_SackBlock		= 5;
+const int32_t TP_Opt_TCP_Timestamps		= 8;
+const int32_t TP_Opt_TCP_MD5Signature		= 19;
 
 
 class McOpt_TCP : public McOption{
@@ -143,6 +148,43 @@ public:
 virtual	~McOpt_TCP_MaximumSegmentSize();
 static	McOpt_TCP_MaximumSegmentSize* create(CSTR);
 	int32_t optionType()const{return TP_Opt_TCP_MaximumSegmentSize;}
+	uint32_t alignment_requirement() const;
+};
+
+class McOpt_TCP_WindowScale :public McOpt_TCP{
+	McOpt_TCP_WindowScale(CSTR);
+public:
+virtual	~McOpt_TCP_WindowScale();
+static	McOpt_TCP_WindowScale* create(CSTR);
+	int32_t optionType()const{return TP_Opt_TCP_WindowScale;}
+	uint32_t alignment_requirement() const;
+};
+
+class McOpt_TCP_SackPermitted :public McOpt_TCP{
+	McOpt_TCP_SackPermitted(CSTR);
+public:
+virtual	~McOpt_TCP_SackPermitted();
+static	McOpt_TCP_SackPermitted* create(CSTR);
+	int32_t optionType()const{return TP_Opt_TCP_SackPermitted;}
+	uint32_t alignment_requirement() const;
+};
+
+class McOpt_TCP_SackBlock :public McOpt_TCP{
+	McOpt_TCP_SackBlock(CSTR);
+public:
+virtual	~McOpt_TCP_SackBlock();
+static	McOpt_TCP_SackBlock* create(CSTR);
+	int32_t optionType()const{return TP_Opt_TCP_SackBlock;}
+	uint32_t alignment_requirement() const;
+	DEC_HC_MLC(Block);
+};
+
+class McOpt_TCP_Timestamps :public McOpt_TCP{
+	McOpt_TCP_Timestamps(CSTR);
+public:
+virtual	~McOpt_TCP_Timestamps();
+static	McOpt_TCP_Timestamps* create(CSTR);
+	int32_t optionType()const{return TP_Opt_TCP_Timestamps;}
 	uint32_t alignment_requirement() const;
 };
 

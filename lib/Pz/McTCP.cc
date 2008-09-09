@@ -179,6 +179,47 @@ McOpt_TCP_MaximumSegmentSize::~McOpt_TCP_MaximumSegmentSize(){}
 uint32_t McOpt_TCP_MaximumSegmentSize::alignment_requirement() const{
 	return DEF_ALIGNMENT_MaximumSegmentSize;}
 
+//----------------------------------------------------------------------------
+McOpt_TCP_WindowScale::McOpt_TCP_WindowScale(CSTR key):
+	SUPER(key){}
+McOpt_TCP_WindowScale::~McOpt_TCP_WindowScale(){}
+
+uint32_t McOpt_TCP_WindowScale::alignment_requirement() const{
+	return 1;}
+
+//----------------------------------------------------------------------------
+McOpt_TCP_SackPermitted::McOpt_TCP_SackPermitted(CSTR key):
+	SUPER(key){}
+McOpt_TCP_SackPermitted::~McOpt_TCP_SackPermitted(){}
+
+uint32_t McOpt_TCP_SackPermitted::alignment_requirement() const{
+	return 1;}
+
+//----------------------------------------------------------------------------
+McOpt_TCP_SackBlock::McOpt_TCP_SackBlock(CSTR key):
+	SUPER(key){}
+McOpt_TCP_SackBlock::~McOpt_TCP_SackBlock(){}
+
+uint32_t McOpt_TCP_SackBlock::alignment_requirement() const{
+	return 1;}
+
+uint32_t McOpt_TCP_SackBlock::HC_MLC(Block)(const ItPosition &at, OCTBUF &buf) const {
+	uint32_t len = buf.remainLength(at.bytes());
+	if(length_) {
+		len = length_->value(at,buf);
+	}
+	uint32_t count = (len - 2) / 8;
+	return(count);
+}
+
+//----------------------------------------------------------------------------
+McOpt_TCP_Timestamps::McOpt_TCP_Timestamps(CSTR key):
+	SUPER(key){}
+McOpt_TCP_Timestamps::~McOpt_TCP_Timestamps(){}
+
+uint32_t McOpt_TCP_Timestamps::alignment_requirement() const{
+	return 1;}
+
 /////////////////////////////////////////////////////////////////////////////// // create options
 #include "PvAutoItem.h"
 #include "PvAction.h"
@@ -195,6 +236,10 @@ void McOpt_TCP::create_options(){
 	LEXADD(McOpt_TCP_EndofOptionList,	"Opt_TCP_EndofOptionList" );
 	LEXADD(McOpt_TCP_NoOperation,		"Opt_TCP_NoOperation" );
 	LEXADD(McOpt_TCP_MaximumSegmentSize,	"Opt_TCP_MaximumSegmentSize" );
+	LEXADD(McOpt_TCP_WindowScale,		"Opt_TCP_WindowScale" );
+	LEXADD(McOpt_TCP_SackPermitted,		"Opt_TCP_SackPermitted" );
+	LEXADD(McOpt_TCP_SackBlock,		"Opt_TCP_SackBlock" );
+	LEXADD(McOpt_TCP_Timestamps,		"Opt_TCP_Timestamps" );
 	}
 
 void McOpt_TCP::common_member(){
@@ -261,6 +306,85 @@ Maximum Segment Size
         +--------+--------+---------+--------+
 #endif
 
+McOpt_TCP_WindowScale* McOpt_TCP_WindowScale::create(CSTR key){
+	McOpt_TCP_WindowScale* mc = new McOpt_TCP_WindowScale(key);
+
+	mc->common_member();
+	mc->member( new MmUint( "Scale",	8,	UN(0),UN(0) ) );
+	// dict
+	MmOption_onTCP::add(mc);		//Hdr_TCP::option=
+	return mc;}
+#if 0
+Window Scale
+	+--------+--------+---------+
+        |00000011|00000011|   scale |
+        +--------+--------+---------+
+#endif
+
+McOpt_TCP_SackPermitted* McOpt_TCP_SackPermitted::create(CSTR key){
+	McOpt_TCP_SackPermitted* mc = new McOpt_TCP_SackPermitted(key);
+
+	mc->common_member();
+	// dict
+	MmOption_onTCP::add(mc);		//Hdr_TCP::option=
+	return mc;}
+#if 0
+Sack Permitted
+	+--------+--------+
+        |00000100|00000010|
+        +--------+--------+
+#endif
+
+McOpt_TCP_SackBlock* McOpt_TCP_SackBlock::create(CSTR key){
+	McOpt_TCP_SackBlock* mc = new McOpt_TCP_SackBlock(key);
+
+	mc->common_member();
+	mc->member(
+		new MmMultipleTwo(
+			new MmUint("BlockLeftEdge",  32, MUST(), MUST()),
+			new MmUint("BlockRightEdge", 32, MUST(), MUST()),
+			(METH_HC_MLC)&McOpt_TCP_SackBlock::HC_MLC(Block)
+		)
+	);
+	// dict
+	MmOption_onTCP::add(mc);		//Hdr_TCP::option=
+	return mc;}
+#if 0
+Sack
+                         +--------+--------+
+                         | Kind=5 | Length |
+       +--------+--------+--------+--------+
+       |      Left Edge of 1st Block       |
+       +--------+--------+--------+--------+
+       |      Right Edge of 1st Block      |
+       +--------+--------+--------+--------+
+       |                                   |
+       /            . . .                  /
+       |                                   |
+       +--------+--------+--------+--------+
+       |      Left Edge of nth Block       |
+       +--------+--------+--------+--------+
+       |      Right Edge of nth Block      |
+       +--------+--------+--------+--------+
+#endif
+
+McOpt_TCP_Timestamps* McOpt_TCP_Timestamps::create(CSTR key){
+	McOpt_TCP_Timestamps* mc = new McOpt_TCP_Timestamps(key);
+
+	mc->common_member();
+	mc->member( new MmUint( "Value",	32,	UN(0),UN(0) ) );
+	mc->member( new MmUint( "EchoReply",	32,	UN(0),UN(0) ) );
+	// dict
+	MmOption_onTCP::add(mc);		//Hdr_TCP::option=
+	return mc;}
+#if 0
+Timestamps
+	+--------+--------+--------+--------+--------+--------+
+        |00000011|00001010|             TS Value              |
+        +--------+--------+--------+--------+--------+--------+
+        |           TS Echo Reply           |
+        +--------+--------+--------+--------+
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 MmOption_onTCP::MmOption_onTCP(CSTR key):MmReference_More0(key,true) {}
