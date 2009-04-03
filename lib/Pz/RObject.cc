@@ -109,8 +109,10 @@ bool TObject::overwrite_ICV_child(ICVControl& c,
 
 // POST ACTION
 void TObject::post_reverse(Con_IPinfo&,RControl&,RObject*){}
+void TObject::post_reverseWithLiteLength(Con_IPinfo&, RControl&, RObject*, uint32_t){}
 void TObject::post_generate(Con_IPinfo&,WControl&,OCTBUF&,WObject*){}
 void TObject::post_generateWithLength(Con_IPinfo &, WControl &, OCTBUF &, WObject *, uint32_t) {}
+void TObject::post_generateWithLiteLength(Con_IPinfo &, WControl &, OCTBUF &, WObject *, uint32_t) {}
 
 //======================================================================
 // CONSTRUCTOR/DESCTUCTOR

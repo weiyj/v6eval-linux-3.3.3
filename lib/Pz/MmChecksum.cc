@@ -161,6 +161,7 @@ virtual	~RmChecksum();
 	void set_calc_pvalue(PvObject* calc);
 	PvObject* calc_pvalue()const{return calc_pvalue_;}
 virtual void post_reverse(Con_IPinfo& info,RControl&,RObject* base);
+virtual void post_reverseWithLiteLength(Con_IPinfo& info,RControl&,RObject* base,uint32_t Xlength);
 virtual void printName(uint32_t t,CSTR cls) const ;
 virtual void logSelf(uint32_t t,CSTR cls) const ;
 };
@@ -220,6 +221,49 @@ void RmChecksum::post_reverse(Con_IPinfo& info,RControl& c,RObject* base){
 			printf("UppType = %d\n",basetype);}
 		printf("== Checksum overwrite buffer ==\n");
 		checkbuf.print(); printf("\n");
+	}
+}
+
+void RmChecksum::post_reverseWithLiteLength(Con_IPinfo& info,RControl& c,RObject* base,uint32_t Xlength){
+	OCTBUF* basebuf = (OCTBUF*)base->pvalue();
+	uint32_t targetlength = basebuf->length();
+
+	if(Xlength < targetlength) {
+		targetlength = Xlength;
+	}
+
+	OCTBUF checkbuf(targetlength, (OCTSTR)basebuf->string(), true);
+#if 1
+	ItPosition at;
+	RObject* r = this;
+	while(r&&r!=base){
+		at += r->offset(); r=r->parent();}
+	checkbuf.encodeZero(at,size());
+	printf("std:at=%d, length=%d\n", at.bytes(), basebuf->length());
+#else
+//	base->overwrite_Checksum_child(c,ItPosition(),checkbuf);
+#endif
+	ChecksumCalculater cal;
+	uint32_t calc = 0;
+	int32_t basetype = -1;
+	if(usepseudo_){
+		basetype = base->meta()->headerType();
+		calc = cal.calculateWithLength(info, basetype, checkbuf, optionable_, basebuf->length());}
+	else{	calc = cal.calculate(checkbuf,optionable_);}
+	PvNumber* pvcalc=new PvNumber(calc);
+	set_calc_pvalue(pvcalc);
+	//
+	PvNumber* decpv = (PvNumber*)pvalue();
+	uint32_t dec = decpv->value();
+	if(dec!=calc){
+		c.unmatchMessage(meta()->string(),decpv,pvcalc);
+		c.set_warning(0);}// wcode 0 ok?
+	if(DBGFLAGS('C')) {
+		if(usepseudo_){
+			info.print(); printf("\n");
+			printf("UppType = %d\n",basetype);}
+		printf("== Checksum overwrite buffer ==\n");
+		checkbuf.print(); printf("\n");
 		}
 	}
 
@@ -243,6 +287,7 @@ public:
 virtual ~WmChecksum();
 virtual void post_generate(Con_IPinfo&,WControl&,OCTBUF& buf,WObject* from);
 virtual void post_generateWithLength(Con_IPinfo &, WControl &, OCTBUF &, WObject *, uint32_t);
+virtual void post_generateWithLiteLength(Con_IPinfo &, WControl &, OCTBUF &, WObject *, uint32_t);
 virtual bool doEvaluate(WControl& c,RObject& r);
 };
 
@@ -325,6 +370,64 @@ void WmChecksum::post_generateWithLength(Con_IPinfo &info, WControl &c, OCTBUF &
 	if(usepseudo_){
 		basetype = base->meta()->headerType();
 		calc = cal.calculateWithLength(info, basetype, checkbuf, optionable_, Xlength);
+	} else {
+		calc = cal.calculate(checkbuf, optionable_);
+	}
+
+	set_rgenerate(new PvNumber(calc));
+	SUPER::generate(c,buf);
+
+	if(DBGFLAGS('C')) {
+		if(usepseudo_){
+			info.print();
+			printf("\n");
+			printf("UppType = %d\n", basetype);
+		}
+
+		printf("== Checksum overwrite buffer ==\n");
+		checkbuf.print();
+		printf("\n");
+	}
+
+	return;
+}
+
+void WmChecksum::post_generateWithLiteLength(Con_IPinfo &info, WControl &c, OCTBUF &buf, WObject *base, uint32_t Xlength) {
+	const OCTBUF *basebuf = (const OCTBUF *)base->pvalue();
+
+	uint32_t targetlength = basebuf->length();
+
+	if(Xlength < targetlength) {
+		targetlength = Xlength;
+	}
+
+	OCTBUF checkbuf(targetlength, (OCTSTR)basebuf->string(), true);
+
+	//
+	// XXX
+	//
+	// (1) target is the last payload
+	//	len: 16 byte, buf: 16 byte	-> OK
+	//	len: 08 byte, buf: 16 byte	-> OK
+	//	len: 24 byte, buf: 16 byte	-> OK
+	//
+	// (2) target is intermediate payload (like piggyback w/ MH)
+	//	len: 16 byte, buf: 16 byte	-> OK
+	//	len: 08 byte, buf: 16 byte	-> OK
+	//	len: 24 byte, buf: 16 byte	-> NG	How shold I get extra payload buffer?
+	//
+
+	ItPosition at = offset();	//frameoffset
+	at -= base->offset();	//distance
+	checkbuf.encodeZero(at, size());
+
+	ChecksumCalculater cal;
+	uint32_t calc = 0;
+	int32_t basetype = -1;
+
+	if(usepseudo_){
+		basetype = base->meta()->headerType();
+		calc = cal.calculateWithLength(info, basetype, checkbuf, optionable_, basebuf->length());
 	} else {
 		calc = cal.calculate(checkbuf, optionable_);
 	}

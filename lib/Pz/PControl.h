@@ -152,8 +152,10 @@ public:
 	void		postUppChecksum(TObject* t){postUppChecksum_=t;}
 	TObject*	postUppChecksum()const{return postUppChecksum_;}
 	void		reverse_postUppChecksum(RControl&,RObject* up);
+	void		reverse_postUppChecksumWithLiteLength(RControl&,RObject* up,uint32_t);
 	void		generate_postUppChecksum(WControl&,OCTBUF&,WObject* up);
 	void		generate_postUppChecksumWithLength(WControl &, OCTBUF &, WObject *, uint32_t);
+	void		generate_postUppChecksumWithLiteLength(WControl &, OCTBUF &, WObject *, uint32_t);
 
 	void		postBSA(TObject* t){postBSA_=t;}
 	TObject*	postBSA()const{return postBSA_;}

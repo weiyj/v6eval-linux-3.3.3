@@ -107,8 +107,10 @@ public:
 			const ItPosition& at,OCTBUF& buf)const;
 // POST ACTION
 virtual	void post_reverse(Con_IPinfo&,RControl&,RObject* from);
+virtual	void post_reverseWithLiteLength(Con_IPinfo &, RControl &, RObject *, uint32_t);
 virtual	void post_generate(Con_IPinfo&,WControl& c,OCTBUF& buf,WObject* from);
 virtual	void post_generateWithLength(Con_IPinfo &, WControl &, OCTBUF &, WObject *, uint32_t);
+virtual	void post_generateWithLiteLength(Con_IPinfo &, WControl &, OCTBUF &, WObject *, uint32_t);
 };
 
 inline const MObject* TObject::meta() const {return meta_;}

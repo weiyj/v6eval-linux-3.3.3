@@ -60,11 +60,21 @@ void Con_IPinfo::generate_postAHICV(WControl& c,OCTBUF& buf,WObject* pkt){
 
 void Con_IPinfo::reverse_postUppChecksum(RControl& c,RObject* up){
 	if(postUppChecksum_)postUppChecksum_->post_reverse(*this,c,up);}
+void Con_IPinfo::reverse_postUppChecksumWithLiteLength(RControl& c,RObject* up,uint32_t d){
+	if(postUppChecksum_)postUppChecksum_->post_reverseWithLiteLength(*this,c,up,d);}
 void Con_IPinfo::generate_postUppChecksum(WControl& c,OCTBUF& buf,WObject* up){
 	if(postUppChecksum_)postUppChecksum_->post_generate(*this,c,buf,up);}
 void Con_IPinfo::generate_postUppChecksumWithLength(WControl &c, OCTBUF &buf, WObject *up, uint32_t d) {
 	if(postUppChecksum_) {
 		postUppChecksum_->post_generateWithLength(*this, c, buf, up, d);
+	}
+
+	return;
+}
+
+void Con_IPinfo::generate_postUppChecksumWithLiteLength(WControl &c, OCTBUF &buf, WObject *up, uint32_t d) {
+	if(postUppChecksum_) {
+		postUppChecksum_->post_generateWithLiteLength(*this, c, buf, up, d);
 	}
 
 	return;
