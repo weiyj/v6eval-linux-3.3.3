@@ -92,6 +92,9 @@
 // For DHCPv6
 #define _UDP_DHCPV6_NAME(_pNAME)	_UDP_DHCPV6_##_pNAME
 
+// For Payload
+#define _PAYLOAD_NAME(_pNAME)		_PAYLOAD_NAME_##_pNAME
+
 //======================================================================
 // Standard Hdr_Ether
 
