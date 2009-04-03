@@ -63,6 +63,7 @@ use File::Basename;
 	vClear
 	vLog
 	vLogHTML
+	vLogTitle
 	vErrmsg
 	vRoundoff
 	vRemote
@@ -822,6 +823,22 @@ vLogHTML($)
 	};
 	prLogHTML($message);
 	prOut "$message" if $VLog == 0;
+}
+
+
+
+########################################################################
+sub
+vLogTitle($)
+{
+	my ($message,	# message to be logged
+    ) = @_;
+	prLog("</TD></TR>\n") if($vLogStat==$vLogStatOpenRow);
+	prLog("<TR><TD><BR></TD><TD>");
+	prLogHTML($message);
+	prOut "$message" if $VLog == 0;
+	prLog("</TD></TR>\n");
+	$vLogStat=$vLogStatCloseRow;
 }
 
 
