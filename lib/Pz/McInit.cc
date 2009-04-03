@@ -58,6 +58,7 @@
 #include "McUDP.h"
 #include "McUDPLite.h"
 #include "McTCP.h"
+#include "McSCTP.h"
 #include "McAlgorithm.h"
 #include "McESP.h"
 #include "McAH.h"
@@ -501,6 +502,86 @@ McObject::initialize()
 	//TCP
 	LEXADD2(McUpp_TCP,			"Upp_TCP","Hdr_TCP" );
 	McOpt_TCP::create_options();
+
+	//SCTP
+	LEXADD2(McUpp_SCTP,		"Upp_SCTP", "Hdr_SCTP");
+
+	// Chunk
+	LEXADD(McChunkAny,		"CHUNK_ANY");
+	LEXADD(McChunkData,		"CHUNK_DATA");
+	LEXADD(McChunkInit,		"CHUNK_INIT");
+	LEXADD(McChunkInitAck,		"CHUNK_INIT_ACK");
+	LEXADD(McChunkSack,		"CHUNK_SACK");
+	LEXADD(McChunkHeartbeat,	"CHUNK_HEARTBEAT");
+	LEXADD(McChunkHeartbeatAck,	"CHUNK_HEARTBEAT_ACK");
+	LEXADD(McChunkAbort,		"CHUNK_ABORT");
+	LEXADD(McChunkShutdown,		"CHUNK_SHUTDOWN");
+	LEXADD(McChunkShutdownAck,	"CHUNK_SHUTDOWN_ACK");
+	LEXADD(McChunkError,		"CHUNK_ERROR");
+	LEXADD(McChunkCookieEcho,	"CHUNK_COOKIE_ECHO");
+	LEXADD(McChunkCookieAck,	"CHUNK_COOKIE_ACK");
+	LEXADD(McChunkCongestionExperiencedReport,"CHUNK_ECN_ECHO");
+	LEXADD(McChunkCongestionWindowReport,"CHUNK_ECN_CWR");
+	LEXADD(McChunkShutdownComplete,	"CHUNK_SHUTDOWN_COMPLETE");
+	LEXADD(McAuthenticationChunk,	"CHUNK_AUTH");
+	LEXADD(McChunkNRSack,		"CHUNK_NR_SACK");
+	LEXADD(McChunkForwardTSN,	"CHUNK_FORWARD_TSN");
+	LEXADD(McChunkAddressConfigurationChange,"CHUNK_ASCONF");
+	LEXADD(McAddressConfigurationAck,"CHUNK_ASCONF_ACK");
+	LEXADD(McChunkPacketDrop,	"CHUNK_PKTDROP");
+	LEXADD(McChunkStreamReset,	"CHUNK_STREAM_RESET");
+	LEXADD(McChunkPadding,		"CHUNK_PADDING");
+
+	// Parameter
+	LEXADD(McParamANY,		"ParameterAny");
+	LEXADD(McParamHeartbeatInfo,	"HeartbeatInfo");
+	LEXADD(McParamIPv4Address,	"IPv4Address");
+	LEXADD(McParamIPv6Address,	"IPv6Address");
+	LEXADD(McParamStaleCookie,	"StaleCookie");
+	LEXADD(McParamUnrecognizedParameters,"PUnrecognizedParameters");
+	LEXADD(McParamHostNameAddress,	"HostNameAddress");
+	LEXADD(McParamCookiePreservative,"CookiePreservative");
+	LEXADD(McParamSupportAddress,	"SupportAddress");
+	LEXADD(McParamENCCapable,	"ENCCapable");
+	LEXADD(McParamForwardTSN,	"ForwardTSN");
+	LEXADD(McParamAdaptationLayerIndication,"AdaptationLayerIndication");
+	LEXADD(McParamSetPrimaryAddress,"SetPrimaryAddress");
+	LEXADD(McParamSupportedExtensions,"SupportedExtensions");
+	LEXADD(McParamAddIPAddress,	"AddIPAddress");
+	LEXADD(McParamDeleteIPAddress,	"DeleteIPAddress");
+	LEXADD(McParamErrorCauseIndication,"ErrorCauseIndication");
+	LEXADD(McParamSuccessIndication,"SuccessIndication");
+	LEXADD(McParamRandom,		"Random");
+	LEXADD(McParamChunkList,	"ChunkList");
+	LEXADD(McParamRequestedHMACAlgorithm,"RequestedHMACAlgorithm");
+	LEXADD(McErrorUnsupportedHMACIdentifier,"UnsupportedHMACIdentifier");
+	LEXADD(McParamPadding,		"PaddingParameter");
+	LEXADD(McParamOutgoingSSNResetRequest,"OutgoingSSNResetRequest");
+	LEXADD(McParamIncomingSSNResetRequest,"IncomingSSNResetRequest");
+	LEXADD(McParamSSNResetRequest,	"SSNResetRequest");
+	LEXADD(McParamStreamResetResponse,"StreamResetResponse");
+	LEXADD(McParamAddStreams,	"AddStreams");
+
+	// ErrorCause
+	LEXADD(McErrorCauseANY,		"ErrorCauseAny");
+	LEXADD(McErrorInvalidStreamIndentifier,"InvalidStreamIndentifier");
+	LEXADD(McErrorMissingMandatoryParameter,"MissingMandatoryParameter");
+	LEXADD(McErrorStaleCookieError,	"StaleCookieError");
+	LEXADD(McErrorOutOfResource,	"OutOfResource");
+	LEXADD(McErrorUnresolvableAddress,"UnresolvableAddress");
+	LEXADD(McErrorUnrecognizedChunkType,"UnrecognizedChunkType");
+	LEXADD(McErrorInvalidMandatoryParameter,"InvalidMandatoryParameter");
+	LEXADD(McErrorUnrecognizedParameters,"UnrecognizedParameters");
+	LEXADD(McErrorNoUserData,	"NoUserData");
+	LEXADD(McErrorCookieRecvShutdown,"CookieRecvShutdown");
+	LEXADD(McErrorRestartWithNewAddresses,"RestartWithNewAddresses");
+	LEXADD(McErrorUserInitiatedAbort,"UserInitiatedAbort");
+	LEXADD(McErrorProtocolViolation,"ProtocolViolation");
+	LEXADD(McErrorDeleteLastRemainingIPAddress,"DeleteLastRemainingIPAddress");
+	LEXADD(McErrorRefusedResourceShortage,"RefusedResourceShortage");
+	LEXADD(McErrorDeleteSourceIPAddress,"DeleteSourceIPAddress");
+	LEXADD(McErrorIllegalASCONFAck,	"IllegalASCONFAck");
+	LEXADD(McErrorNoAuthorization,	"NoAuthorization");
 
 	// IKE
 	LEXADD2(McUdp_ISAKMP,			"Udp_ISAKMP", "Hdr_ISAKMP");

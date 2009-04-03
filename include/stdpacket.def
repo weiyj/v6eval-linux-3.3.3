@@ -73,6 +73,10 @@
 #define _UPP_TCP_NAME(_pNAME)		_UPP_TCP_##_pNAME
 #define _HDR_TCP_NAME(_pNAME)		_HDR_TCP_##_pNAME
 
+// For SCTP
+#define _UPP_SCTP_NAME(_pNAME)		_UPP_SCTP_##_pNAME
+#define _HDR_SCTP_NAME(_pNAME)		_HDR_SCTP_##_pNAME
+
 // For UDP
 #define _UPP_UDP_NAME(_pNAME)		_UPP_UDP_##_pNAME
 #define _HDR_UDP_NAME(_pNAME)		_HDR_UDP_##_pNAME
@@ -714,6 +718,17 @@ FEM_tcp4_exth(_pNAME, _pETHER, _oPACKET_IPV4, \
 {header=_HDR_IPV4_NAME(_pNAME);upper=_UPP_TCP_NAME(_pNAME);}, \
 _oHDR_TCP, _oUPP_TCP)
 
+#define FEM_sctp4_exth(_pNAME, _pETHER, _oHDR_IPV4, _oPACKET_IPV4, _oHDR_SCTP, _oUPP_SCTP) \
+FEM_hdr_ipv4_exth(_pNAME, _pETHER, _oHDR_IPV4, _oPACKET_IPV4) \
+Upp_SCTP _UPP_SCTP_NAME(_pNAME) _oUPP_SCTP \
+Hdr_SCTP _HDR_SCTP_NAME(_pNAME) _oHDR_SCTP
+
+//---------------------------------------------------------------------
+#define FEM_sctp4(_pNAME, _pETHER, _oPACKET_IPV4, _oHDR_SCTP, _oUPP_SCTP) \
+FEM_sctp4_exth(_pNAME, _pETHER, _oPACKET_IPV4, \
+{header=_HDR_IPV4_NAME(_pNAME);upper=_UPP_SCTP_NAME(_pNAME);}, \
+_oHDR_SCTP, _oUPP_SCTP)
+
 //---------------------------------------------------------------------
 #define FEM_udp4_exth(_pNAME, _pETHER, _oHDR_IPV4, _oPACKET_IPV4, _oHDR_UDP, _oUPP_UDP) \
 FEM_hdr_ipv4_exth(_pNAME, _pETHER, _oHDR_IPV4, _oPACKET_IPV4) \
@@ -773,6 +788,18 @@ Hdr_TCP _HDR_TCP_NAME(_pNAME) _oHDR_TCP
 FEM_tcp6_exth(_pNAME, _pETHER, _oPACKET_IPV6, \
 {header=_HDR_IPV6_NAME(_pNAME);upper=_UPP_TCP_NAME(_pNAME);}, \
 _oHDR_TCP, _oUPP_TCP)
+
+//---------------------------------------------------------------------
+#define FEM_sctp6_exth(_pNAME, _pETHER, _oHDR_IPV6, _oPACKET_IPV6, _oHDR_SCTP, _oUPP_SCTP) \
+FEM_hdr_ipv6_exth(_pNAME, _pETHER, _oHDR_IPV6, _oPACKET_IPV6) \
+Upp_SCTP _UPP_SCTP_NAME(_pNAME) _oUPP_SCTP \
+Hdr_SCTP _HDR_SCTP_NAME(_pNAME) _oHDR_SCTP
+
+//---------------------------------------------------------------------
+#define FEM_sctp6(_pNAME, _pETHER, _oPACKET_IPV6, _oHDR_SCTP, _oUPP_SCTP) \
+FEM_sctp6_exth(_pNAME, _pETHER, _oPACKET_IPV6, \
+{header=_HDR_IPV6_NAME(_pNAME);upper=_UPP_SCTP_NAME(_pNAME);}, \
+_oHDR_SCTP, _oUPP_SCTP)
 
 //---------------------------------------------------------------------
 #define FEM_udp6_exth(_pNAME, _pETHER, _oHDR_IPV6, _oPACKET_IPV6, _oHDR_UDP, _oUPP_UDP) \
