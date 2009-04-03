@@ -59,6 +59,8 @@ const int32_t TP_Udp_ISAKMP	= 500;
 const int32_t TP_Udp_RIPng	= 521;
 const int32_t TP_Udp_DHCPv6_CL	= 546;
 const int32_t TP_Udp_DHCPv6_SV	= 547;
+const int32_t TP_Udp_DHCPv4_CL	= 68;
+const int32_t TP_Udp_DHCPv4_SV	= 67;
 const int32_t TP_Udp_SIP	= 5060;
 
 class McUpp_UDP :public McUpper{

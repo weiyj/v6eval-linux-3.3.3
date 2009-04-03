@@ -1,6 +1,6 @@
 LIBS = libPz.a
 OBJS =	DmObject.o ItPosition.o McAH.o McARP.o McAlgorithm.o	\
-	McDHCPv6.o McDNS.o McESP.o McEther.o McICMPv4.o		\
+	McDHCPv6.o McDHCPv4.o McDNS.o McESP.o McEther.o McICMPv4.o	\
 	McICMPv6.o McIGMP.o McIKE.o McIPv4.o McIPv6.o McInit.o	\
 	McMLDv2.o McMobility.o McNoNext.o McNull.o McObject.o	\
 	McRIPng.o McRR.o McSIP.o McSNMP.o McSub.o McTCP.o	\

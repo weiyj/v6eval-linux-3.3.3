@@ -121,6 +121,7 @@ virtual int32_t authProto() const;
 virtual int32_t icmpv4Type() const;
 virtual int32_t igmpType() const;
 virtual int32_t upperPort() const;
+virtual int32_t dhcpv4Type() const;
 virtual int32_t dhcpv6Type() const;
 virtual int32_t DOIvalue() const;
 virtual int32_t notify_value() const;

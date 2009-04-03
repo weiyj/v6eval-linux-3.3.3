@@ -89,6 +89,9 @@
 // For SNMP
 #define _UDP_SNMP_NAME(_pNAME)		_UDP_SNMP_##_pNAME
 
+// For DHCPv4
+#define _UDP_DHCPV4_NAME(_pNAME)	_UDP_DHCPV4_##_pNAME
+
 // For DHCPv6
 #define _UDP_DHCPV6_NAME(_pNAME)	_UDP_DHCPV6_##_pNAME
 
@@ -924,5 +927,38 @@ _FEM_dhcp6_exth(RelayReply, _pNAME, _pETHER, _oHDR_IPV6, _oPACKET_IPV6, _oHDR_UD
 
 #define FEM_dhcp6_relay_reply(_pNAME, _pETHER, _oHDR_IPV6, _oHDR_UDP, _oDHCPV6_RelayReply) \
 _FEM_dhcp6(RelayReply, _pNAME, _pETHER, _oHDR_IPV6, _oHDR_UDP, _oDHCPV6_RelayReply)
+
+////////////////////////////////////////////////////////////////
+#define _FEM_dhcp4_exth(_pType, _pNAME, _pETHER, _oHDR_IPV4, _oPACKET_IPV4, _oHDR_UDP, _oDHCPV4) \
+FEM_udp4_exth(_pNAME, _pETHER, _oHDR_IPV4, _oPACKET_IPV4, _oHDR_UDP, \
+{header=_HDR_UDP_NAME(_pNAME); payload=_UDP_DHCPV4_NAME(_pNAME);}) \
+Udp_DHCPv4_##_pType _UDP_DHCPV4_NAME(_pNAME) _oDHCPV4
+
+////////////////////////////////////////////////////////////////
+#define _FEM_dhcp4(_pType, _pNAME, _pETHER, _oHDR_IPV4, _oHDR_UDP, _oDHCPV4) \
+_FEM_dhcp4_exth(_pType, _pNAME, _pETHER, _oHDR_IPV4, \
+{header=_HDR_IPV4_NAME(_pNAME); upper=_UPP_UDP_NAME(_pNAME);}, \
+_oHDR_UDP, _oDHCPV4)
+
+////////////////////////////////////////////////////////////////
+#define FEM_dhcp4_any_exth(_pNAME, _pETHER, _oHDR_IPV4, _oPACKET_IPV4, _oHDR_UDP, _oDHCPV4_ANY) \
+_FEM_dhcp4_exth(ANY, _pNAME, _pETHER, _oHDR_IPV4, _oPACKET_IPV4, _oHDR_UDP, _oDHCPV4_ANY)
+
+#define FEM_dhcp4_any(_pNAME, _pETHER, _oHDR_IPV4, _oHDR_UDP, _oDHCPV4_ANY) \
+_FEM_dhcp4(ANY, _pNAME, _pETHER, _oHDR_IPV4, _oHDR_UDP, _oDHCPV4_ANY)
+
+////////////////////////////////////////////////////////////////
+#define FEM_dhcp4_boot_request_exth(_pNAME, _pETHER, _oHDR_IPV4, _oPACKET_IPV4, _oHDR_UDP, _oDHCPV4_BootRequest) \
+_FEM_dhcp4_exth(BootRequest, _pNAME, _pETHER, _oHDR_IPV4, _oPACKET_IPV4, _oHDR_UDP, _oDHCPV4_BootRequest)
+
+#define FEM_dhcp4_boot_request(_pNAME, _pETHER, _oHDR_IPV4, _oHDR_UDP, _oDHCPV4_BootRequest) \
+_FEM_dhcp4(BootRequest, _pNAME, _pETHER, _oHDR_IPV4, _oHDR_UDP, _oDHCPV4_BootRequest)
+
+////////////////////////////////////////////////////////////////
+#define FEM_dhcp4_boot_reply_exth(_pNAME, _pETHER, _oHDR_IPV4, _oPACKET_IPV4, _oHDR_UDP, _oDHCPV4_BootReply) \
+_FEM_dhcp4_exth(BootReply, _pNAME, _pETHER, _oHDR_IPV4, _oPACKET_IPV4, _oHDR_UDP, _oDHCPV4_BootReply)
+
+#define FEM_dhcp4_boot_reply(_pNAME, _pETHER, _oHDR_IPV4, _oHDR_UDP, _oDHCPV4_BootReply) \
+_FEM_dhcp4(BootReply, _pNAME, _pETHER, _oHDR_IPV4, _oHDR_UDP, _oDHCPV4_BootReply)
 
 #endif /*_STDPACKET_DEF_*/

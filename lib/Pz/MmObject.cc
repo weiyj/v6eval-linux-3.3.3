@@ -195,6 +195,10 @@ int32_t MmDecorator::SITvalue() const {
 	return(body_ ? body_->SITvalue() : SUPER::SITvalue());
 }
 
+int32_t MmDecorator::dhcpv4Type() const {
+	return(body_ ? body_->dhcpv4Type() : SUPER::dhcpv4Type());
+}
+
 int32_t MmDecorator::duidType() const {
 	return(body_ ? body_->duidType() : SUPER::duidType());
 }

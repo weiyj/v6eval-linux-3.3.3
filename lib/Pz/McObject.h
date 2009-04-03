@@ -112,6 +112,7 @@ virtual	int32_t icmpv4Type() const;
 virtual	int32_t igmpType() const;
 virtual	int32_t upperPort() const;
 virtual	int32_t dhcpv6Type() const;
+virtual	int32_t dhcpv4Type() const;
 virtual	int32_t DOIvalue() const;
 virtual	int32_t notify_value() const;
 virtual	int32_t ProtocolID() const;
@@ -224,6 +225,7 @@ inline int32_t MObject::icmpv4Type() const {return -1;}
 inline int32_t MObject::igmpType() const {return -1;}
 inline int32_t MObject::upperPort() const {return -1;}
 inline int32_t MObject::dhcpv6Type() const {return -1;}
+inline int32_t MObject::dhcpv4Type() const {return -1;}
 inline int32_t MObject::DOIvalue() const {return -1;}
 inline int32_t MObject::notify_value() const {return -1;}
 inline int32_t MObject::ProtocolID() const {return -1;}

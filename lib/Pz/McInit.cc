@@ -64,6 +64,7 @@
 #include "McSIP.h"
 #include "McDNS.h"
 #include "McDHCPv6.h"
+#include "McDHCPv4.h"
 #include "McMLDv2.h"
 #include "McIGMP.h"
 #if !defined(NOT_USE_SNMP)
@@ -326,6 +327,49 @@ McObject::initialize()
 
 	// RFC 2915 - NAPTR DNS RR
 	LEXADD(McDNS_RR_NAPTR,			"DNS_RR_NAPTR");
+
+	// DHCPv4
+	LEXADD(McUdp_DHCPv4_ANY,		"Udp_DHCPv4_ANY");
+	LEXADD(McUdp_DHCPv4_BootRequest,	"Udp_DHCPv4_BootRequest");
+	LEXADD(McUdp_DHCPv4_BootReply,		"Udp_DHCPv4_BootReply");
+
+	// DHCP options
+	LEXADD(McOpt_DHCPv4_ANY,		"Opt_DHCPv4_ANY");
+	LEXADD(McOpt_DHCPv4_Pad,		"Opt_DHCPv4_Pad");
+	LEXADD(McOpt_DHCPv4_End,		"Opt_DHCPv4_End");
+	LEXADD(McOpt_DHCPv4_SubnetMask,		"Opt_DHCPv4_SubnetMask");
+	LEXADD(McOpt_DHCPv4_TimeOffset,		"Opt_DHCPv4_TimeOffset");
+	LEXADD(McOpt_DHCPv4_Router,		"Opt_DHCPv4_Router");
+	LEXADD(McOpt_DHCPv4_TimeServer,		"Opt_DHCPv4_TimeServer");
+	LEXADD(McOpt_DHCPv4_NameServer,		"Opt_DHCPv4_NameServer");
+	LEXADD(McOpt_DHCPv4_DomainNameServer,	"Opt_DHCPv4_DomainNameServer");
+	LEXADD(McOpt_DHCPv4_LogServer,		"Opt_DHCPv4_LogServer");
+	LEXADD(McOpt_DHCPv4_CookieServer,	"Opt_DHCPv4_CookieServer");
+	LEXADD(McOpt_DHCPv4_LPRServer,		"Opt_DHCPv4_LPRServer");
+	LEXADD(McOpt_DHCPv4_ImpressServer,	"Opt_DHCPv4_ImpressServer");
+	LEXADD(McOpt_DHCPv4_ResourceLocationServer,"Opt_DHCPv4_ResourceLocationServer");
+	LEXADD(McOpt_DHCPv4_HostName,		"Opt_DHCPv4_HostName");
+	LEXADD(McOpt_DHCPv4_BootFileSize,	"Opt_DHCPv4_BootFileSize");
+	LEXADD(McOpt_DHCPv4_MeritDumpFile,	"Opt_DHCPv4_MeritDumpFile");
+	LEXADD(McOpt_DHCPv4_DomainName,		"Opt_DHCPv4_DomainName");
+	LEXADD(McOpt_DHCPv4_SwapServer,		"Opt_DHCPv4_SwapServer");
+	LEXADD(McOpt_DHCPv4_RootPath,		"Opt_DHCPv4_RootPath");
+	LEXADD(McOpt_DHCPv4_ExtensionsPath,	"Opt_DHCPv4_ExtensionsPath");
+	LEXADD(McOpt_DHCPv4_NISDomainName,	"Opt_DHCPv4_NISDomainName");
+	LEXADD(McOpt_DHCPv4_RequestedIPAddress,	"Opt_DHCPv4_RequestedIPAddress");
+	LEXADD(McOpt_DHCPv4_IPAddressLeaseTime,	"Opt_DHCPv4_IPAddressLeaseTime");
+	LEXADD(McOpt_DHCPv4_OptionOverload,	"Opt_DHCPv4_OptionOverload");
+	LEXADD(McOpt_DHCPv4_TFTPServerName,	"Opt_DHCPv4_TFTPServerName");
+	LEXADD(McOpt_DHCPv4_BootfileName,	"Opt_DHCPv4_BootfileName");
+	LEXADD(McOpt_DHCPv4_MessageType,	"Opt_DHCPv4_MessageType");
+	LEXADD(McOpt_DHCPv4_SID,		"Opt_DHCPv4_SID");
+	LEXADD(McOpt_DHCPv4_ParameterRequestList,	"Opt_DHCPv4_ParameterRequestList");
+	LEXADD(McOpt_DHCPv4_Message,		"Opt_DHCPv4_Message");
+	LEXADD(McOpt_DHCPv4_MaxMessageSize,	"Opt_DHCPv4_MaxMessageSize");
+	LEXADD(McOpt_DHCPv4_RenewalTimeValue,	"Opt_DHCPv4_RenewalTimeValue");
+	LEXADD(McOpt_DHCPv4_RebindingTimeValue,	"Opt_DHCPv4_RebindingTimeValue");
+	LEXADD(McOpt_DHCPv4_VendorClass,	"Opt_DHCPv4_VendorClass");
+	LEXADD(McOpt_DHCPv4_CID,		"Opt_DHCPv4_CID");
 
 	// DHCPv6
 	LEXADD(McUdp_DHCPv6_ANY,		"Udp_DHCPv6_ANY");
