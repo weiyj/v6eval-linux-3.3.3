@@ -59,6 +59,7 @@
 #include "McUDPLite.h"
 #include "McTCP.h"
 #include "McSCTP.h"
+#include "McDCCP.h"
 #include "McAlgorithm.h"
 #include "McESP.h"
 #include "McAH.h"
@@ -582,6 +583,59 @@ McObject::initialize()
 	LEXADD(McErrorDeleteSourceIPAddress,"DeleteSourceIPAddress");
 	LEXADD(McErrorIllegalASCONFAck,	"IllegalASCONFAck");
 	LEXADD(McErrorNoAuthorization,	"NoAuthorization");
+
+	//DCCP
+	LEXADD2(McUpp_DCCP,		"Upp_DCCP", "Hdr_DCCP");
+	LEXADD(McDCCPAny,		"DCCP_ANY");
+	LEXADD(McDCCPRequest,		"DCCP_REQUEST");
+	LEXADD(McDCCPRequestShort,	"DCCP_REQUEST_SHORT");
+	LEXADD(McDCCPResponse,		"DCCP_RESPONSE");
+	LEXADD(McDCCPResponseShort,	"DCCP_RESPONSE_SHORT");
+	LEXADD(McDCCPData,		"DCCP_DATA");
+	LEXADD(McDCCPDataShort,		"DCCP_DATA_SHORT");
+	LEXADD(McDCCPAck,		"DCCP_ACK");
+	LEXADD(McDCCPAckShort,		"DCCP_ACK_SHORT");
+	LEXADD(McDCCPDataAck,		"DCCP_DATA_ACK");
+	LEXADD(McDCCPDataAckShort,	"DCCP_DATA_ACK_SHORT");
+	LEXADD(McDCCPCloseReq,		"DCCP_CLOSEREQ");
+	LEXADD(McDCCPCloseReqShort,	"DCCP_CLOSEREQ_SHORT");
+	LEXADD(McDCCPClose,		"DCCP_CLOSE");
+	LEXADD(McDCCPCloseShort,	"DCCP_CLOSE_SHORT");
+	LEXADD(McDCCPReset,		"DCCP_RESET");
+	LEXADD(McDCCPResetShort,	"DCCP_RESET_SHORT");
+	LEXADD(McDCCPSync,		"DCCP_SYNC");
+	LEXADD(McDCCPSyncShort,		"DCCP_SYNC_SHORT");
+	LEXADD(McDCCPSyncAck,		"DCCP_SYNC_ACK");
+	LEXADD(McDCCPSyncAckShort,	"DCCP_SYNC_ACK_SHORT");
+	//
+	LEXADD(McOpt_DCCP_ANY,		"DCCPO_ANY");
+	LEXADD(McOpt_DCCP_Reserved,	"DCCPO_RESERVED");
+	LEXADD(McOpt_DCCP_Padding,	"DCCPO_PADDING");
+	LEXADD(McOpt_DCCP_Mandatory,	"DCCPO_MANDATORY");
+	LEXADD(McOpt_DCCP_ChangeL,	"DCCPO_CHANGE_L");
+	LEXADD(McOpt_DCCP_ConfirmL,	"DCCPO_CONFIRM_L");
+	LEXADD(McOpt_DCCP_ChangeR,	"DCCPO_CHANGE_R");
+	LEXADD(McOpt_DCCP_ConfirmR,	"DCCPO_CONFIRM_R");
+	LEXADD(McOpt_DCCP_InitCookie,	"DCCPO_INIT_COOKIE");
+	LEXADD(McOpt_DCCP_NDPCount,	"DCCPO_NDP_COUNT");
+	LEXADD(McOpt_DCCP_AckVector0,	"DCCPO_ACK_VECTOR_0");
+	LEXADD(McOpt_DCCP_AckVector1,	"DCCPO_ACK_VECTOR_1");
+	LEXADD(McOpt_DCCP_Timestamp,	"DCCPO_TIMESTAMP");
+	LEXADD(McOpt_DCCP_TimestampEcho,"DCCPO_TIMESTAMP_ECHO");
+	LEXADD(McOpt_DCCP_ElapsedTime,	"DCCPO_ELAPSED_TIME");
+	LEXADD(McOpt_DCCP_DataChecksum,	"DCCPO_DATA_CHECKSUM");
+	//
+	LEXADD(McFeature_ANY,		"DCCPF_ANY");
+	LEXADD(McFeature_CCID,		"DCCPF_CCID");
+	LEXADD(McFeature_ShortSeq,	"DCCPF_SHORT_SEQNOS");
+	LEXADD(McFeature_SeqWin,	"DCCPF_SEQUENCE_WINDOW");
+	LEXADD(McFeature_ENCIncapable,	"DCCPF_ECN_INCAPABLE");
+	LEXADD(McFeature_AckRatio,	"DCCPF_ACK_RATIO");
+	LEXADD(McFeature_SendAckVector,	"DCCPF_SEND_ACK_VECTOR");
+	LEXADD(McFeature_SendNDPCount,	"DCCPF_SEND_NDP_COUNT");
+	LEXADD(McFeature_MinCsumCover,	"DCCPF_MIN_CSUM_COVER");
+	LEXADD(McFeature_DataChecksum,	"DCCPF_DATA_CHECKSUM");
+	LEXADD(McFeature_SendLevRate,	"DCCPF_SEND_LEV_RATE");
 
 	// IKE
 	LEXADD2(McUdp_ISAKMP,			"Udp_ISAKMP", "Hdr_ISAKMP");
