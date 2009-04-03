@@ -191,6 +191,13 @@ void LxLexer::initialize() {
 	delimiter("&",AND);
 	delimiter("|",OR);
 	delimiter("^",XOR);
+	delimiter("+",ADD);
+	delimiter("-",SUB);
+	delimiter("*",MUL);
+	delimiter("/",DIV);
+	delimiter("?",QUEST);
+	delimiter(":",COLON);
+	delimiter("!",NOT);
 	//--------------------------------------------------------------
 	// INSIDE FUNCTION
 //	function(new MvFunction("sizeof"));

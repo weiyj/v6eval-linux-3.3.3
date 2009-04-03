@@ -49,6 +49,7 @@
 %term ADD
 %term SUB
 %term MUL
+%term DIV
 %term AND
 %term OR
 %term XOR
@@ -162,7 +163,7 @@
 %left RELOP
 %left SHIFTL SHIFTR
 %left ADD SUB
-%left MUL DIVOP
+%left MUL DIV
 %right NOT INC DEC
 %right QUEST
 %left LB LP
@@ -257,6 +258,7 @@ dnshdr.body	:	member.def.l. dnsqd.ref. dnsan.ref. dnsns.ref. dnsar.ref.;
 /* LIST AND OPTIONALS							*/
 /*----------------------------------------------------------------------*/
 extent.ref.l.:						{$$=0;}
+|			LC member.def.l RC
 |			extent.ref.l;
 extent.ref.l:		extent.ref
 |			extent.ref.l extent.ref;
@@ -265,7 +267,10 @@ extent.ref.l:		extent.ref
 /* option.ref.l:		option.ref */
 /* |			option.ref.l option.ref; */
 member.def.l.:						{$$=0;}
-|			member.def.l;
+|			member.def.l
+|			LC member.def.l. RC
+|			member.def.l. LC member.def.l. RC
+|			member.def.l. member.def.l;
 member.def.l:		member.def
 |			member.def.l member.def;
 data.def.l:		data.def
@@ -355,8 +360,8 @@ algomem.def:		ALGOMEM_PAD EQ padfunc SM	{
 /*----------------------------------------------------------------------*/
 /* OPERATION AND TERMINALS						*/
 /*----------------------------------------------------------------------*/
-cmp.term:		NUMBER				{$$=$1;};
-data.term:		NUMBER				{$$=$1;}
+cmp.term:		expression				{$$=$1;};
+data.term:		expression				{$$=$1;}
 |			values				{$$=$1;}
 |			function			{$$=$1;};
 upper.term:		NAME				{$$=$1;}
@@ -364,9 +369,42 @@ upper.term:		NAME				{$$=$1;}
 opt.term:		NAME				{$$=$1;}
 |			action				{$$=$1;}
 |			function			{$$=$1;};
-mem.term:		NUMBER				{$$=$1;}
+mem.term:		expression				{$$=$1;}
 |			action				{$$=$1;}
 |			function			{$$=$1;};
+/*----------------------------------------------------------------------*/
+expression:		NUMBER				{$$=$1;}
+|			LP expression RP		{$$=$2;}
+|			expression AND expression		{
+				bool ok;
+				$$=PvNumber::unique($1->int64Value(ok) & $3->int64Value(ok));}
+|			expression OR expression		{
+				bool ok;
+				$$=PvNumber::unique($1->int64Value(ok) | $3->int64Value(ok));}
+|			expression XOR expression		{
+				bool ok;
+				$$=PvNumber::unique($1->int64Value(ok) ^ $3->int64Value(ok));}
+|			expression ADD expression		{
+				bool ok;
+				$$=PvNumber::unique($1->int64Value(ok) + $3->int64Value(ok));}
+|			expression SUB expression		{
+				bool ok;
+				$$=PvNumber::unique($1->int64Value(ok) - $3->int64Value(ok));}
+|			SUB expression				{
+				bool ok;
+				$$=PvNumber::unique(0 - $2->int64Value(ok));}
+|			expression MUL expression	{
+				bool ok;
+				$$=PvNumber::unique($1->int64Value(ok) * $3->int64Value(ok));}
+|			expression DIV expression	{
+				bool ok;
+				$$=PvNumber::unique($1->int64Value(ok) / $3->int64Value(ok));}
+|			expression SHIFTL expression	{
+				bool ok;
+				$$=PvNumber::unique($1->int64Value(ok) << $3->int64Value(ok));}
+|			expression SHIFTR expression	{
+				bool ok;
+				$$=PvNumber::unique($1->int64Value(ok) >> $3->int64Value(ok));}
 /*----------------------------------------------------------------------*/
 eq.name:		EQ NAME				{$$=$2;};
 eq.anyname:		EQ anyname			{$$=$2;};
@@ -391,7 +429,7 @@ number.l:		NUMBER				{numbers_->add($1);}
 /*----------------------------------------------------------------------*/
 anyname:		ANY				{$$=$1;}
 |			NAME				{$$=$1;};
-arg.term:		NUMBER				{$$=$1;}
+arg.term:		expression				{$$=$1;}
 |			STRING				{$$=$1;}
 |			NAME				{$$=$1;}
 |			function			{$$=$1;};
