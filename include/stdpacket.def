@@ -77,6 +77,10 @@
 #define _UPP_UDP_NAME(_pNAME)		_UPP_UDP_##_pNAME
 #define _HDR_UDP_NAME(_pNAME)		_HDR_UDP_##_pNAME
 
+// For UDP-Lite
+#define _UPP_UDP_LITE_NAME(_pNAME)	_UPP_UDP_LITE_##_pNAME
+#define _HDR_UDP_LITE_NAME(_pNAME)	_HDR_UDP_LITE_##_pNAME
+
 // For RIPng
 #define _UDP_RIPNG_NAME(_pNAME)		_UDP_RIPNG_##_pNAME
 
@@ -723,6 +727,18 @@ FEM_udp4_exth(_pNAME, _pETHER, _oPACKET_IPV4, \
 _oHDR_UDP, _oUPP_UDP)
 
 //---------------------------------------------------------------------
+#define FEM_udp4_lite_exth(_pNAME, _pETHER, _oHDR_IPV4, _oPACKET_IPV4, _oHDR_UDPLite, _oUPP_UDPLite) \
+FEM_hdr_ipv4_exth(_pNAME, _pETHER, _oHDR_IPV4, _oPACKET_IPV4) \
+Upp_UDPLite _UPP_UDP_LITE_NAME(_pNAME) _oUPP_UDPLite \
+Hdr_UDPLite _HDR_UDP_LITE_NAME(_pNAME) _oHDR_UDPLite
+
+//---------------------------------------------------------------------
+#define FEM_udp4_lite(_pNAME, _pETHER, _oPACKET_IPV4, _oHDR_UDPLite, _oUPP_UDPLite) \
+FEM_udp4_lite_exth(_pNAME, _pETHER, _oPACKET_IPV4, \
+{header=_HDR_IPV4_NAME(_pNAME);upper=_UPP_UDP_LITE_NAME(_pNAME);}, \
+_oHDR_UDPLite, _oUPP_UDPLite)
+
+//---------------------------------------------------------------------
 #define FEM_udp4_dns_exth(_pNAME, _pETHER, _oHDR_IPV4, _oPACKET_IPV4, _oHDR_UDP, _oUDP_DNS) \
 FEM_udp4_exth(_pNAME, _pETHER, _oHDR_IPV4, _oPACKET_IPV4, _oHDR_UDP, \
 {header=_HDR_UDP_NAME(_pNAME); payload=_UDP_DNS_NAME(_pNAME);}) \
@@ -769,6 +785,18 @@ Hdr_UDP _HDR_UDP_NAME(_pNAME) _oHDR_UDP
 FEM_udp6_exth(_pNAME, _pETHER, _oPACKET_IPV6, \
 {header=_HDR_IPV6_NAME(_pNAME);upper=_UPP_UDP_NAME(_pNAME);}, \
 _oHDR_UDP, _oUPP_UDP)
+
+//---------------------------------------------------------------------
+#define FEM_udp6_lite_exth(_pNAME, _pETHER, _oHDR_IPV6, _oPACKET_IPV6, _oHDR_UDPLite, _oUPP_UDPLite) \
+FEM_hdr_ipv6_exth(_pNAME, _pETHER, _oHDR_IPV6, _oPACKET_IPV6) \
+Upp_UDPLite _UPP_UDP_LITE_NAME(_pNAME) _oUPP_UDPLite \
+Hdr_UDPLite _HDR_UDP_LITE_NAME(_pNAME) _oHDR_UDPLite
+
+//---------------------------------------------------------------------
+#define FEM_udp6_lite(_pNAME, _pETHER, _oPACKET_IPV6, _oHDR_UDPLite, _oUPP_UDPLite) \
+FEM_udp6_lite_exth(_pNAME, _pETHER, _oPACKET_IPV6, \
+{header=_HDR_IPV6_NAME(_pNAME);upper=_UPP_UDP_LITE_NAME(_pNAME);}, \
+_oHDR_UDPLite, _oUPP_UDPLite)
 
 //---------------------------------------------------------------------
 #define FEM_ripng_exth(_pNAME, _pETHER, _oHDR_IPV6, _oPACKET_IPV6, _oHDR_UDP, _oUDP_RIPNG) \

@@ -56,6 +56,7 @@
 #include "McARP.h"
 #include "McNoNext.h"
 #include "McUDP.h"
+#include "McUDPLite.h"
 #include "McTCP.h"
 #include "McAlgorithm.h"
 #include "McESP.h"
@@ -281,6 +282,9 @@ McObject::initialize()
 
 	//UDP
 	LEXADD2(McUpp_UDP,			"Upp_UDP",	"Hdr_UDP");
+
+	//UDP-Lite
+	LEXADD2(McUpp_UDPLite,			"Upp_UDPLite",	"Hdr_UDPLite");
 
 	// RIPng
 	LEXADD(McUdp_RIPng,			"Udp_RIPng");
