@@ -267,6 +267,42 @@ RObject* MmMultiple::reverse(RControl& c,
 		r = mbody->reverse(c,r_parent,at,buf);}//forward
 	return r;}
 
+//======================================================================
+//more than 0
+MmMultipleTwo::MmMultipleTwo(MmObject* e,MmObject* e2,METH_HC_MLC meth):MmDecorator(e),body2_(e2),
+	METH_HC_MLC_(meth) {}
+MmMultipleTwo::~MmMultipleTwo() {}
+
+MObject* MmMultipleTwo::findMember(CSTR str) const{
+	if (body2_ && body2_->findMember(str)) {
+		return body2_->findMember(str);
+	} else {
+		return MmDecorator::findMember(str);
+	}
+}
+
+// COMPOSE
+void MmMultipleTwo::composeList(WControl& c,
+		WObject* w_parent,const PObjectList& pls)const{
+	c.dict_set(0);	//clear composeable Mc type dict
+	MmObject* mbody = body();
+	MmObject* mbody2 = body2();
+	pls.elementsPerformWith(
+		(PObjectFunc)&PObject::vmatchselfComposeTwo,&c,w_parent,mbody,mbody2);
+	}
+
+// REVERSE
+RObject* MmMultipleTwo::reverse(RControl& c,
+		RObject* r_parent,ItPosition& at,OCTBUF& buf) const {
+	RObject* r=0;
+	MmObject* mbody = body();
+	MmObject* mbody2 = body2();
+	uint32_t cou = (compound()->*METH_HC_MLC_)(ItPosition(),buf);
+	for(uint32_t i=0;i<cou;i++){
+		r = mbody->reverse(c,r_parent,at,buf);
+		r = mbody2->reverse(c,r_parent,at,buf);
+	}//forward
+	return r;}
 
 //======================================================================
 #define SUPER	MmObject

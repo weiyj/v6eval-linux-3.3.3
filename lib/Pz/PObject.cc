@@ -148,6 +148,15 @@ void PObject::vmatchselfCompose(void* v,va_list ap) const {
 		selfCompose(*c,w_parent);}
 	}
 
+void PObject::vmatchselfComposeTwo(void* v,va_list ap) const {
+	WControl* c = (WControl*)v;
+	DCLA(WObject*,w_parent);
+	DCLA(const MObject*,m);
+	DCLA(const MObject*,m2);
+	if(isEqualMeta(m) || isEqualMeta(m2)){
+		selfCompose(*c,w_parent);}
+	}
+
 bool PObject::check_nameCompose(WControl&,WObject*,const PvName&) const{
 	return true;}
 

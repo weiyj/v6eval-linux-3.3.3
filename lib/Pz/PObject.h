@@ -79,6 +79,7 @@ virtual bool check_nameCompose(WControl&,WObject* w_parent,const PvName&) const;
 // COMPOSE INTERFACE(for Collection elementsPerform) --------------------------
 	void vselfCompose(void* v,va_list ap) const;
 	void vmatchselfCompose(void* v,va_list ap) const;
+	void vmatchselfComposeTwo(void* v,va_list ap) const;
 //----------------------------------------------------------------------
 virtual	const MObject* meta() const;
 virtual	bool isEqualMeta(const MObject*) const;

@@ -157,6 +157,24 @@ virtual RObject* reverse(RControl&,RObject* r_parent,ItPosition&,OCTBUF&) const;
 };
 
 //======================================================================
+// DECORATOR MULTIPLE MEMBERS
+class MmMultipleTwo:public MmDecorator { //more than 0
+private:
+	MmObject* body2_;
+	METH_HC_MLC	METH_HC_MLC_;
+protected:
+	MmObject* body2()const{return body2_;}
+public:
+	MmMultipleTwo(MmObject*,MmObject*,METH_HC_MLC meth);
+virtual	~MmMultipleTwo();
+// COMPOSE/REVERSE INTERFACE --------------------------------------------------
+virtual	MObject* findMember(CSTR) const;
+virtual	void composeList(WControl&,
+		WObject* w_parent,const PObjectList& pls) const;
+virtual RObject* reverse(RControl&,RObject* r_parent,ItPosition&,OCTBUF&) const;
+};
+
+//======================================================================
 // ELEMENT MEMBERS
 class MmElement:public MmObject {
 private:
