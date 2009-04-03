@@ -214,6 +214,18 @@ void MvComb::args_compose(WControl& c,
 	pas.elementsPerformWith((PObjectFunc)&PObject::vselfCompose,&c,w_self);}
 
 //======================================================================
+MvExist::MvExist(CSTR s):MvFunction(s) {}
+MvExist::~MvExist() {}
+
+// COMPOSE
+WObject* MvExist::composeWv(WControl&,
+		WObject* w_parent,const PObject* pv) const {
+	return new WvExist(w_parent,this,pv);}
+void MvExist::args_compose(WControl& c,
+		WObject* w_self,const PObjectList& pas) const{
+	pas.elementsPerformWith((PObjectFunc)&PObject::vselfCompose,&c,w_self);}
+
+//======================================================================
 MvOctets::MvOctets(CSTR s):MvFunction(s) {}
 MvOctets::~MvOctets() {}
 bool MvOctets::functionGenerate(WControl& c,WObject* w,OCTBUF& b,const PObjectList& a) const {

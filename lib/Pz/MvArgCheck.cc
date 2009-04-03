@@ -96,6 +96,12 @@ bool MvComb::checkArgument(const PFunction&,const PObjectList&) const {
 	return rc;}
 
 //======================================================================
+// exist(var[,var[,...]])
+bool MvExist::checkArgument(const PFunction&,const PObjectList&) const {
+	bool rc=true;
+	return rc;}
+
+//======================================================================
 // repeat(int,int)
 bool MvRepeat::checkArgument(const PFunction& o,const PObjectList& a) const {
 	bool ok=true;

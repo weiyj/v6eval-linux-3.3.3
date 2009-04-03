@@ -187,6 +187,18 @@ virtual void args_compose(WControl&,
 };
 
 //======================================================================
+class MvExist:public MvFunction {
+public:
+	MvExist(CSTR);
+virtual	~MvExist();
+virtual	bool checkArgument(const PFunction&,const PObjectList&) const;
+// COMPOSE INTERFACE ----------------------------------------------------------
+virtual	WObject* composeWv(WControl&,WObject* w_parent,const PObject* pv) const;
+virtual void args_compose(WControl&,
+		WObject* w_self,const PObjectList& pas) const;
+};
+
+//======================================================================
 class MvOctets:public MvFunction {
 public:
 	MvOctets(CSTR);

@@ -158,6 +158,11 @@ bool WvComb::generate(WControl& wc,OCTBUF&) {
 	o->generateNotAllow("comb"); wc.result(1);
 	return wc;}
 
+bool WvExist::generate(WControl& wc,OCTBUF&) {
+	const PObject* o=object();
+	o->generateNotAllow("exist"); wc.result(1);
+	return wc;}
+
 //----------------------------------------------------------------------
 void WObject::internalGeneratePrologue(ItPosition&) {}
 
@@ -338,6 +343,24 @@ RObject* WvComb::evaluate(WControl& c,RObject* r) {
 	if(tmp.size()!=0) {c.result(1); functionFailure(r);}
 	return p->nextEvaluation(r);}
 
+RObject* WvExist::evaluate(WControl& c,RObject* r) {
+	WObjectList tmp(references_);
+	RObject* q=r;
+	RObject* p=r->parent();
+	for(;tmp.size();) {
+		WObject* ok;
+		while(q != 0) {
+			ok=tmp.findMatching(q,(WObjectEqFunc)&WObject::vevaluate);
+			if (ok) break;
+			q=p->nextEvaluation(q);
+		};
+		if(ok==0) {c.result(1); functionFailure(r); return q;}
+		tmp.remove(ok);
+		q=r;
+	}
+	if(tmp.size()!=0) {c.result(1); functionFailure(r);}
+	return 0;}
+
 //----------------------------------------------------------------------
 void WObject::internalEvaluatePrologue(ItPosition&) {}
 
@@ -392,6 +415,8 @@ void WvSubstr::child(TObject* c) {
 void WvOneof::child(TObject* c) {
 	references_.add((WObject*)c); WvObject::child(c);}
 void WvComb::child(TObject* c) {
+	references_.add((WObject*)c); WvObject::child(c);}
+void WvExist::child(TObject* c) {
 	references_.add((WObject*)c); WvObject::child(c);}
 
 //----------------------------------------------------------------------
@@ -461,6 +486,10 @@ WvOneof::~WvOneof() {}
 WvComb::WvComb(WObject* p,const MObject* m,const PObject* o):WvObject(p,m,o),
 	references_() {}
 WvComb::~WvComb() {}
+
+WvExist::WvExist(WObject* p,const MObject* m,const PObject* o):WvObject(p,m,o),
+	references_() {}
+WvExist::~WvExist() {}
 
 //======================================================================
 // FOR DEBUGING

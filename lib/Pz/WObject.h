@@ -274,4 +274,18 @@ virtual	bool generate(WControl&,OCTBUF&);
 protected:
 virtual	void child(TObject*);
 };
+
+//======================================================================
+// EXIST FUNCTION COMPOSER
+class WvExist:public WvObject {
+private:
+	WObjectList references_;
+public:
+	WvExist(WObject*,const MObject*,const PObject* =0);
+virtual	~WvExist();
+virtual	RObject* evaluate(WControl&,RObject*);
+virtual	bool generate(WControl&,OCTBUF&);
+protected:
+virtual	void child(TObject*);
+};
 #endif

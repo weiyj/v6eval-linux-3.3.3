@@ -250,6 +250,7 @@ void LxLexer::initialize() {
 	function(new MvWithin("within"));
 	function(new MvOneof("oneof"));
 	function(new MvComb("comb"));
+	function(new MvExist("exist"));
 	//--------------------------------------------------------------
 	// OPTIONAL CONTROL using for matching
 	action(new MvAUTO("auto",AUTO));	// auto generation
