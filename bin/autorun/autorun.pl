@@ -241,7 +241,7 @@ sub parseIndex(){
 		$current{SeqName}=$SeqName;
 		$current{SeqDir}=$SeqDir;
 		$current{doc}=$doc;
-		$current{links}=$links ? $links : 1;
+		$current{links}=$links ? $links : 2;
 		$testnum++;
 		$total ++;
 	}
@@ -462,6 +462,7 @@ ECHO
 			undef $dumplinktxt;
 			if($mklink) {
 			    for($i=0;$i<$current{links};$i++) {
+				next if ($i != 0 && !(-e "$current{log}.Link$i.dump"));
 				$dumplink    .= "<A HREF=\"$current{log}.Link$i.dump\">Link$i</A> ";
 				$dumplinktxt .= "<A HREF=\"$current{log}.Link$i.dump.txt\">Link$i</A> ";
 			    }
