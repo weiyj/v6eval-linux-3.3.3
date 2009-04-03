@@ -518,7 +518,7 @@ PvSNMPVersion::PvSNMPVersion():PvNumber() {}
 PvSNMPVersion::PvSNMPVersion(int32_t x):PvNumber(x) {}
 PvSNMPVersion::PvSNMPVersion(const PvNumber& x):PvNumber(x) {}
 void PvSNMPVersion::print() const {
-	printf("%u", (value()&0xff));
+	printf("%u", ((uint32_t)value()&0xff));
 	switch(value()&0xff) {
 		case 0:	printf(" (Version 1)"); break;
 		case 1:	printf(" (Version 2C)"); break;
@@ -652,7 +652,7 @@ PvErrorStatus::~PvErrorStatus() {}
 PvErrorStatus::PvErrorStatus():PvNumber() {}
 PvErrorStatus::PvErrorStatus(int32_t x):PvNumber(x) {}
 void PvErrorStatus::print() const {
-	printf("%u", (value()&0xff));
+	printf("%u", ((uint32_t)value()&0xff));
 	switch(value()&0xff) {
 		/* Errors defined in rfc1157.txt	*/
 		case 0: printf(" (noError)"); break;

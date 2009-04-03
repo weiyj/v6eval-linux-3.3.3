@@ -168,7 +168,7 @@ bool PvFunction::generateOctetsWith(PvOctets& oct,WObject* w) const {
 //======================================================================
 // PvNumber
 PvNumber::PvNumber():PvObject(),value_(0) {}
-PvNumber::PvNumber(int32_t v):PvObject(),value_(v) {}
+PvNumber::PvNumber(int64_t v):PvObject(),value_(v) {}
 PvNumber::PvNumber(const PvNumber& o):PvObject(o),value_(o.value()) {}
 PvNumber::~PvNumber() {}
 PvObject* PvNumber::shallowCopy() const {return new PvNumber(*this);}
@@ -178,12 +178,18 @@ bool PvNumber::generate(WControl& c,WObject* w,OCTBUF& s) const {
 	w->encodeNumber(c,s,*this);
 	return c;}
 
-int32_t PvNumber::intValue(bool& ok) const {ok=true; return value_;}
+int32_t PvNumber::intValue(bool& ok) const {ok=true; return (int32_t)value_;}
+int64_t PvNumber::int64Value(bool& ok) const {ok=true; return value_;}
 void PvNumber::print() const {
-	printf("%u",value_);}
+	printf("%llu",value_);}
 
-int32_t PvNumber::compareNumber(int32_t r) const {
-	return value()-r;}
+int32_t PvNumber::compareNumber(int64_t r) const {
+	if (value()-r > 0)
+		return 1;
+	else if(value()-r < 0)
+		return -1;
+	else
+		return 0;}
 int32_t PvNumber::compareObject(const PObject& r) const {
 	return -(r.compareNumber(value()));}
 
@@ -280,7 +286,7 @@ int32_t PvFunction::compareObject(const PObject& r) const {
 	const MvFunction* m=metaClass();
 	return m->compareObject(r,args());}
 
-PvNumber* PvNumber::unique(int32_t n) {
+PvNumber* PvNumber::unique(int64_t n) {
 	PvNumber tmp(n);
 	PvNumber* f=numbers_.find(&tmp);
 	if(f==0) {

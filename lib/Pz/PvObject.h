@@ -146,33 +146,34 @@ class PvNumberSet;
 //======================================================================
 class PvNumber:public PvObject {
 private:
-	int32_t value_;
+	int64_t value_;
 static	PvNumberSet numbers_;
 public:
 	PvNumber();
-	PvNumber(int32_t);
+	PvNumber(int64_t);
 	PvNumber(const PvNumber&);
 virtual	~PvNumber();
 virtual	PvObject* shallowCopy() const;
 //----------------------------------------------------------------------
 // ENCODING/DECODING
 virtual	bool generate(WControl&,WObject*,OCTBUF&) const;
-virtual	int32_t compareNumber(int32_t) const;
+virtual	int32_t compareNumber(int64_t) const;
 virtual	int32_t compareObject(const PObject&) const;
 //----------------------------------------------------------------------
 virtual	uint32_t objectLength(const WObject*) const;
 virtual	int32_t intValue(bool&) const;
-virtual	int32_t value() const;
+virtual int64_t int64Value(bool&) const;
+virtual	int64_t value() const;
 virtual	void print() const;
-	uint32_t hash() const;
+	uint64_t hash() const;
 	bool isEqual(const PvNumber*) const;
-static	PvNumber* unique(int32_t);
-	void value_set(int32_t val);
+static	PvNumber* unique(int64_t);
+	void value_set(int64_t val);
 };
-inline int32_t PvNumber::value() const {return value_;}
-inline uint32_t PvNumber::hash() const {return value();}
+inline int64_t PvNumber::value() const {return value_;}
+inline uint64_t PvNumber::hash() const {return value();}
 inline bool PvNumber::isEqual(const PvNumber* p) const {return value()==p->value();}
-inline void PvNumber::value_set(int32_t val){value_=val;}
+inline void PvNumber::value_set(int64_t val){value_=val;}
 
 #include "CmCltn.h"
 interfaceCmSet(PvNumberSet,PvNumber);

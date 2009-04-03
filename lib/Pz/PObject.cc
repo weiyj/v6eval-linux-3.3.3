@@ -69,6 +69,7 @@ const PObject* PObject::corresponding(const PObject&) const {return this;}
 const PObject* PObject::correspondingMeta(const MObject*) const {return 0;}
 
 int32_t PObject::intValue(bool& ng) const {ng=false; return 0;}
+int64_t PObject::int64Value(bool& ng) const {ng=false; return 0;}
 CSTR PObject::strValue(bool& ng) const {ng=false; return 0;}
 COCTSTR PObject::octetsValue(bool& ng) const {ng=false; return 0;}
 PvOctets* PObject::octetString() const {return 0;}
@@ -96,7 +97,7 @@ void PObject::log(uint32_t t) const {}
 void PObject::generateNotAllow(CSTR s) const {
 	error("E generate not allow for %s",s);}
 int32_t PObject::compareOctets(const PvOctets&) const {return -1;}
-int32_t PObject::compareNumber(int32_t) const {return -1;}
+int32_t PObject::compareNumber(int64_t) const {return -1;}
 int32_t PObject::compareTimeval(const timeval&) const {return -1;}
 int32_t PObject::compareCalc() const{return -1;}
 int32_t PObject::compareObject(const PObject&) const {return -1;}

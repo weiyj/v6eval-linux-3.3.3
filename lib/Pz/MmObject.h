@@ -229,12 +229,12 @@ public:
 		const ICVoverwriter* ow=0,METH_HC_ForIPinfo meth=0);
 virtual	~MmUint();
 //----------------------------------------------------------------------
-virtual	void encode(uint32_t,const ItPosition&,OCTBUF&) const;
+virtual	void encode(uint64_t,const ItPosition&,OCTBUF&) const;
 virtual	bool encodeNumber(WControl&,const ItPosition&,OCTBUF&,const PvNumber&) const;
 //----------------------------------------------------------------------
-virtual	uint32_t rdecode(ItPosition&,const OCTBUF&,bool&) const;
-virtual	uint32_t decode(const ItPosition&,const OCTBUF&) const;
-virtual	uint32_t value(const ItPosition&,const OCTBUF&) const;
+virtual	uint64_t rdecode(ItPosition&,const OCTBUF&,bool&) const;
+virtual	uint64_t decode(const ItPosition&,const OCTBUF&) const;
+virtual	uint64_t value(const ItPosition&,const OCTBUF&) const;
 //----------------------------------------------------------------------
 inline	uint16_t width() const;
 virtual	uint16_t position() const;
@@ -254,8 +254,8 @@ public:
 	MmHostUint(CSTR,uint16_t,const PObject* =0,const PObject* =0,
 		const ICVoverwriter* ow=0,METH_HC_ForIPinfo meth=0);
 virtual	~MmHostUint();
-virtual	void encode(uint32_t,const ItPosition&,OCTBUF&) const;
-virtual	uint32_t decode(const ItPosition&,const OCTBUF&) const;
+virtual	void encode(uint64_t,const ItPosition&,OCTBUF&) const;
+virtual	uint64_t decode(const ItPosition&,const OCTBUF&) const;
 };
 
 //======================================================================

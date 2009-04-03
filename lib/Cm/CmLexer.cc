@@ -107,9 +107,10 @@ CSTR CmLexer::nameLex(STR& s,CmCString& tmp) {
 
 //----------------------------------------------------------------------
 // SCAN FOR NUMERICS
-int32_t CmLexer::digitLex(STR& s) {
+int64_t CmLexer::digitLex(STR& s) {
 	int c=*s;
-	int32_t v=0, base, mask;
+	int64_t v=0;
+	int32_t  base, mask;
 	/**/ if(c!='0')				{base=10; mask=eDD_;}
 	else if((c=*next())=='x'||c=='X')	{base=16; mask=eHH_; c=*next();}
 	else if(c=='b'||c=='B')			{base=2; mask=eBB_; c=*next();}

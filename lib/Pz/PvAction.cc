@@ -83,7 +83,7 @@ bool PvANY::generate(WControl& c,WObject*,OCTBUF&) const {
 	return c;}
 
 int32_t PvANY::compareOctets(const PvOctets&) const {return 0;}
-int32_t PvANY::compareNumber(int32_t) const {return 0;}
+int32_t PvANY::compareNumber(int64_t) const {return 0;}
 int32_t PvANY::compareObject(const PObject&) const {return 0;}
 int32_t PvANY::compareObjectWith(WControl&,const PObject&) const {return 0;}
 

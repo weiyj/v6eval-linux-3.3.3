@@ -102,7 +102,7 @@ virtual	STR nextToken();
 virtual	STR controls(STR);
 	STR skipComment(STR);
 virtual	CSTR nameLex(STR&,CmCString&);
-virtual	int32_t digitLex(STR&);
+virtual	int64_t digitLex(STR&);
 virtual	CSTR stringLex(STR&,CmCString&);
 //----------------------------------------------------------------------
 // ITERATE BUFFER

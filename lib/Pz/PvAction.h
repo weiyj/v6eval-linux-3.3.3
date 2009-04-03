@@ -80,7 +80,7 @@ virtual	~PvANY();
 virtual	PvObject* shallowCopy() const;
 virtual bool generate(WControl&,WObject* wmem,OCTBUF& buf)const;
 virtual	int32_t compareOctets(const PvOctets&) const;
-virtual	int32_t compareNumber(int32_t) const;
+virtual	int32_t compareNumber(int64_t) const;
 virtual	int32_t compareObject(const PObject&) const;
 virtual	int32_t compareObjectWith(WControl&,const PObject&) const;
 virtual	void print() const;

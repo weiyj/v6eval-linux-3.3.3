@@ -377,38 +377,52 @@ MmHostUint::~MmHostUint() {}
 
 
 //----------------------------------------------------------------------
-void MmUint::encode(uint32_t h,const ItPosition& at,OCTBUF& dst) const {
+void MmUint::encode(uint64_t h,const ItPosition& at,OCTBUF& dst) const {
 	uint16_t w=width();
-	if(w>32) {abort();}
-	dst.encodeUint(h,at,w);}
+	uint32_t *v = (uint32_t *)&h;
+	ItPosition tmp = at;
+	if(w>64) {abort();}
+	else if(w > 32) {dst.encodeUint(*(v + 1), tmp, w - 32);tmp.addBits(w - 32);}
+	dst.encodeUint(*v, tmp, w > 32 ? 32 : w);}
 
-void MmHostUint::encode(uint32_t h,const ItPosition& at,OCTBUF& dst) const {
+void MmHostUint::encode(uint64_t h,const ItPosition& at,OCTBUF& dst) const {
 	uint16_t w=width();
-	if(w>32) {abort();}
-	dst.encodeNUint(h,at,w);}
+	uint32_t *v = (uint32_t *)&h;
+	ItPosition tmp = at;
+	if(w>64) {abort();}
+	else if(w > 32) {dst.encodeUint(*(v + 1), tmp, w - 32);tmp.addBits(w - 32);}
+	dst.encodeUint(*v, tmp, w > 32 ? 32 : w);}
 
 bool MmUint::encodeNumber(WControl&,const ItPosition& at,OCTBUF& dst,const PvNumber& n) const {
 	encode(n.value(),at,dst);
 	return true;}
 
 //----------------------------------------------------------------------
-uint32_t MmUint::rdecode(ItPosition& at,const OCTBUF& src,bool& ok) const {
+uint64_t MmUint::rdecode(ItPosition& at,const OCTBUF& src,bool& ok) const {
 	ItPosition ml(objectLength(),width());
 	if(at<ml) {ok=false; return 0;}
 	ok=true;
 	at-=ml;
 	return decode(at,src);}
-uint32_t MmUint::decode(const ItPosition& at,const OCTBUF& src) const {
+uint64_t MmUint::decode(const ItPosition& at,const OCTBUF& src) const {
 	uint16_t w=width();
-	if(w>32) {abort();}
-	return src.decodeUint(at,w);}
+	uint64_t ret = 0;
+	ItPosition tmp = at;
+	if(w>64) {abort();}
+	else if(w > 32) {ret = (uint64_t)src.decodeUint(tmp, w - 32);tmp.addBits(w - 32);}
+	ret = (ret << 32) + src.decodeUint(tmp, w > 32 ? 32 : w);
+	return ret;}
 
-uint32_t MmHostUint::decode(const ItPosition& at,const OCTBUF& src) const {
+uint64_t MmHostUint::decode(const ItPosition& at,const OCTBUF& src) const {
 	uint16_t w=width();
-	if(w>32) {abort();}
-	return src.decodeNUint(at,w);}
+	uint64_t ret = 0;
+	ItPosition tmp = at;
+	if(w>64) {abort();}
+	else if(w > 32) {ret = (uint64_t)src.decodeUint(tmp, w - 32);tmp.addBits(w - 32);}
+	ret = (ret << 32) + src.decodeUint(tmp, w > 32 ? 32 : w);
+	return ret;}
 
-uint32_t MmUint::value(const ItPosition& on,const OCTBUF& src) const {
+uint64_t MmUint::value(const ItPosition& on,const OCTBUF& src) const {
 	ItPosition at(on);
 	ItPosition delta(offset(),position());
 	at+=delta;
@@ -417,7 +431,7 @@ uint32_t MmUint::value(const ItPosition& on,const OCTBUF& src) const {
 // REVERSE
 PvObject* MmUint::reversePv(RControl&,
 		const ItPosition& at,const ItPosition&,const OCTBUF& buf)const{
-	uint32_t val = decode(at,buf);
+	uint64_t val = decode(at,buf);
 	return new PvNumber(val);}
 
 //======================================================================

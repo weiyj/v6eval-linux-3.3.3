@@ -88,7 +88,7 @@ int32_t LxLexer::lex(PObject* compound) {
 		yylval=name;
 		return NAME;}
 	else if(isdigit(c)) {				/* NUMBER	*/
-		int32_t n=digitLex(s);
+		int64_t n=digitLex(s);
 		yylval=PvNumber::unique(n);
 		return NUMBER;}
 	else if(c=='"'||c=='\''){			/* QUOTE	*/
