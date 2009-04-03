@@ -345,7 +345,6 @@ ECHO
 <TR><TD>Start:</TD><TD>$StartTime</TD></TR>
 <TR><TD>End :</TD><TD>$EndTime</TD></TR>
 </TABLE>
-<HR>
 ECHO
 	}		# if($opt_profile)
 	}
