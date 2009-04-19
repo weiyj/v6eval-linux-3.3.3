@@ -135,6 +135,17 @@ if ($rOpt_policy eq "ipsec") {
 	}
 }
 
+if ($rOpt_upperspec eq "icmp6") {
+	if (defined($rOpt_icmp6_type) && defined($rOpt_icmp6_code)) {
+		$rOpt_upperspec .= " $rOpt_icmp6_type";
+		$rOpt_upperspec .= ",$rOpt_icmp6_code";
+	} elsif (defined($rOpt_icmp6_type) || defined($rOpt_icmp6_code)) {
+		print STDERR "both icmp6_type and icmp6_code are required\n";
+		usage();
+		goto error;
+	}
+}
+
 #----------------------------------------------------------------------
 
 $setkey_cmd = "spdadd $rOpt_src$rOpt_sport $rOpt_dst$rOpt_dport $rOpt_upperspec -P $rOpt_direction";
