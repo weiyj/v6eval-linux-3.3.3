@@ -195,6 +195,7 @@ void LxLexer::initialize() {
 	delimiter("-",SUB);
 	delimiter("*",MUL);
 	delimiter("/",DIV);
+	delimiter("%",MOD);
 	delimiter("?",QUEST);
 	delimiter(":",COLON);
 	delimiter("!",NOT);

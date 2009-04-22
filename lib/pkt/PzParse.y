@@ -58,6 +58,7 @@
 %term NOT
 %term INC
 %term DEC
+%term MOD
 
 /* operators */
 %term ASOP
@@ -163,7 +164,7 @@
 %left RELOP
 %left SHIFTL SHIFTR
 %left ADD SUB
-%left MUL DIV
+%left MUL DIV MOD
 %right NOT INC DEC
 %right QUEST
 %left LB LP
@@ -399,6 +400,9 @@ expression:		NUMBER				{$$=$1;}
 |			expression DIV expression	{
 				bool ok;
 				$$=PvNumber::unique($1->int64Value(ok) / $3->int64Value(ok));}
+|			expression MOD expression	{
+				bool ok;
+				$$=PvNumber::unique($1->int64Value(ok) % $3->int64Value(ok));}
 |			expression SHIFTL expression	{
 				bool ok;
 				$$=PvNumber::unique($1->int64Value(ok) << $3->int64Value(ok));}
