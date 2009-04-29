@@ -43,6 +43,7 @@
  */
 #include "McSCTP.h"
 #include "MmSCTPChecksum.h"
+#include "MmSCTPAuth.h"
 #include "MmData.h"
 #include "ItPosition.h"
 #include "WObject.h"
@@ -106,7 +107,10 @@ bool McUpp_SCTP::generate(WControl& c,WObject* w_self,OCTBUF& buf) const {
 	bool rtn = SUPER::generate(c, w_self, buf);
 	if(!c.error()){
 		Con_IPinfo* info = c.IPinfo();
-		if(info)info->generate_postUppChecksum(c, buf, w_self);
+		if(info) {
+			info->generate_postSCTPAuth(c, buf, w_self);
+			info->generate_postUppChecksum(c, buf, w_self);
+		}
 	}
 	return rtn;
 }
@@ -925,8 +929,7 @@ McAuthenticationChunk* McAuthenticationChunk::create(CSTR key){
 	mc->common_member();
 	mc->member(new MmUint("SharedKeyIdentifier", 16, UN(0), UN(0)));
 	mc->member(new MmUint("HMACIdentifier", 16, UN(0), UN(0)));
-	mc->member(new MmData("HMAC"));
-	mc->member(new MmData("Padding", DEF_EVALSKIP));
+	mc->member(new MmSCTPAuth("HMAC"));
 
 	MmChunk::add(mc);
 	return mc;

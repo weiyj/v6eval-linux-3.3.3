@@ -585,6 +585,51 @@ bool MfDHCPAuth::checkArgument(const PFunction &o, const PObjectList &a) const {
 }
 
 //======================================================================
+// sctpauth(algo, hexstr);
+
+bool MfSCTPAuth::checkArgument(const PFunction &o, const PObjectList &a) const {
+	bool ok = true;
+	bool rc = true;
+	CSTR name = o.metaString();
+
+	uint32_t n = a.size();
+	if (n != 2) {
+		o.error("E %s must have 2 argument, not %d", name, n);
+		return(false);
+	}
+
+	CSTR a0 = a[0]->strValue(ok);
+	if (!ok) {
+		o.error("E %s first argument has to be string", name);
+		return(false);
+	} else {
+		if (strcmp(a0, "sha1")
+#if defined(OPENSSL_VERSION_NUMBER) && (OPENSSL_VERSION_NUMBER >= 0x0090800fL)
+		&& strcmp(a0, "sha256")
+#endif
+		) {
+			o.error("E %s unknown algorithm -- %s", name, a0);
+			return(false);
+		}
+	}
+
+	CSTR a1 = a[1]->strValue(ok);
+	if (!ok) {
+		o.error("E %s second argument has to be string", name);
+		rc = false;
+	} else {
+		uint32_t a1len = a[1]->length();
+
+		if (!isHexStr(a1, a1len)) {
+			o.error("E %s argument has to be hex characters", name);
+			rc = false;
+		}
+	}
+
+	return(rc);
+}
+
+//======================================================================
 // substr(var,int,int)
 bool MvSubstr::checkArgument(const PFunction& o,const PObjectList& a) const {
 	bool ok=true;

@@ -226,6 +226,7 @@ void LxLexer::initialize() {
 	// binding security association
 	function(new MfBSA("bsa"));
 	function(new MfDHCPAuth("dhcpauth"));
+	function(new MfSCTPAuth("sctpauth"));
 	//--------------------------------------------------------------
 	// ADDRESS GENERATION(length depend on function)
 	// call functions to resolve presentation to network

@@ -128,6 +128,14 @@ void Con_IPinfo::generate_postDHCPAuth(WControl &c, OCTBUF &buf, WObject *up) {
 	return;
 }
 
+void Con_IPinfo::generate_postSCTPAuth(WControl &c, OCTBUF &buf, WObject *up) {
+	if(postSCTPAuth_) {
+		postSCTPAuth_->post_generate(*this, c, buf, up);
+	}
+
+	return;
+}
+
 void Con_IPinfo::print(){
 	#define PRCR	printf("\n")
 	printf("== IPinfo == "); PRCR;

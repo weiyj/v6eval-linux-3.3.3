@@ -390,6 +390,27 @@ class MfDHCPAuth: public MvOctets {
 inline int32_t MfDHCPAuth::token() const {return metaToken(tkn_dhcpauthfunc_);}
 
 //======================================================================
+class MfSCTPAuth: public MvOctets {
+private:
+static uint32_t length_;
+public:
+	MfSCTPAuth(CSTR);
+virtual ~MfSCTPAuth();
+
+virtual bool generateOctetsWith(const PObjectList &, PvOctets &, WObject *) const;
+virtual uint32_t functionLength(const PObjectList &, const WObject *) const;
+virtual bool checkArgument(const PFunction &, const PObjectList &) const;
+virtual PObject *tokenObject(int, CSTR) const;
+
+virtual OCTSTR init(OCTSTR, const PObjectList &) const;
+virtual void update(OCTSTR, const PObjectList &, const OCTBUF &) const;
+virtual PvOctets *result(OCTSTR, const PObjectList &) const;
+
+virtual bool hex_pton(OCTSTR, uint32_t, CSTR, uint32_t) const;
+virtual bool isHexStr(CSTR, uint32_t) const;
+};
+
+//======================================================================
 class MvSubstr:public MvOctets {
 public:
 	MvSubstr(CSTR);

@@ -124,10 +124,12 @@ class Con_IPinfo{
 	TObject*	postBSA_;
 	TObject	*postP2_HASH_2_;
 	TObject*	postDHCPAuth_;
+	TObject*	postSCTPAuth_;
 public:
 	Con_IPinfo():
 		SrcAddr_(0),DstAddr_(0),LastDstAddr_(0),Route_isLeft_(false),
-		postIPChecksum_(0),postAHICV_(0),postUppChecksum_(0),postBSA_(0), postP2_HASH_2_(0), postDHCPAuth_(0) {}
+		postIPChecksum_(0),postAHICV_(0),postUppChecksum_(0),postBSA_(0),
+		postP2_HASH_2_(0), postDHCPAuth_(0), postSCTPAuth_(0) {}
 	~Con_IPinfo(){}
 public:
 	void		SrcAddr(const PvObject* v){SrcAddr_=v;}
@@ -167,12 +169,16 @@ public:
 	void		postDHCPAuth(TObject *t) {postDHCPAuth_ = t; return;}
 	TObject*	postDHCPAuth() const {return(postDHCPAuth_);}
 
+	void		postSCTPAuth(TObject *t) {postSCTPAuth_ = t; return;}
+	TObject*	postSCTPAuth() const {return(postSCTPAuth_);}
+
 	void		reverse_postBSA(RControl&,RObject* up);
 	void		reverse_postP2_HASH_2(RControl &, RObject *);
 	void		reverse_postDHCPAuth(RControl &, RObject *);
 	void		generate_postBSA(WControl&,OCTBUF&,WObject* up);
 	void		generate_postP2_HASH_2(WControl &, OCTBUF &, WObject *);
 	void		generate_postDHCPAuth(WControl &, OCTBUF &, WObject *);
+	void		generate_postSCTPAuth(WControl &, OCTBUF &, WObject *);
 //
 	void		print();
 };

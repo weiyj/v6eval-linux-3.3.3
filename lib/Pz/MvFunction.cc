@@ -51,6 +51,7 @@
 #include "PControl.h"
 #include "McMobility.h"
 #include "McDHCPv6.h"
+#include "MmSCTPAuth.h"
 #include "McDNS.h"
 #include "McSIP.h"
 #include "McSNMP.h"
@@ -1167,6 +1168,137 @@ PObject *MfDHCPAuth::tokenObject(int l, CSTR f) const {
 	return(new PfDHCPAuth(this, f, l));
 }
 #undef DHCP_HMAC_MD5
+
+//======================================================================
+#define SCTP_SHA1_SIG_SIZE 20
+#define SCTP_SHA256_SIG_SIZE 32
+
+uint32_t MfSCTPAuth::length_ = SCTP_SHA1_SIG_SIZE;
+
+MfSCTPAuth::MfSCTPAuth(CSTR s): MvOctets(s) {}
+MfSCTPAuth::~MfSCTPAuth() {}
+
+uint32_t MfSCTPAuth::functionLength(const PObjectList &a, const WObject *) const {
+	bool ok = true;
+	CSTR a0 = a[0]->strValue(ok);
+
+	length_ = SCTP_SHA1_SIG_SIZE;
+
+	if (ok) {
+		if (!strcmp(a0, "sha1")) {
+			length_ = SCTP_SHA1_SIG_SIZE;
+#if defined(OPENSSL_VERSION_NUMBER) && (OPENSSL_VERSION_NUMBER >= 0x0090800fL)
+		} else if (!strcmp(a0, "sha256")) {
+			length_ = SCTP_SHA256_SIG_SIZE;
+#endif
+		}
+	}
+
+	return length_;
+}
+
+bool MfSCTPAuth::generateOctetsWith(const PObjectList &a, PvOctets &oct, WObject *) const {
+	oct.set(length_);
+	memset(oct.buffer(), 0, length_);
+	return(true);
+}
+
+OCTSTR MfSCTPAuth::init(OCTSTR cp, const PObjectList &a) const {
+	HMAC_CTX *ctx = cp != 0 ? (HMAC_CTX *)cp : new HMAC_CTX;
+	bool ok = true;
+	CSTR work = 0;
+	OCTSTR key = 0;
+	PvOctets oct;
+	uint32_t keylen = 0;
+
+	keylen = a[1]->length();
+	keylen = (keylen + 1) / 2;
+	work = a[1]->strValue(ok);
+
+	oct.set(keylen);
+	key = oct.buffer();
+
+	hex_pton(key, keylen, work, a[1]->length());
+
+	if (length_ == SCTP_SHA1_SIG_SIZE) {
+		HMAC_Init(ctx, (OCTSTR)key, keylen, EVP_sha1());
+#if defined(OPENSSL_VERSION_NUMBER) && (OPENSSL_VERSION_NUMBER >= 0x0090800fL)
+	} else if (length_ == SCTP_SHA256_SIG_SIZE) {
+		HMAC_Init(ctx, (OCTSTR)key, keylen, EVP_sha256());
+#endif
+	}
+
+	return((OCTSTR)ctx);
+}
+
+void MfSCTPAuth::update(OCTSTR cp, const PObjectList &a, const OCTBUF &s) const {
+	HMAC_CTX *ctx = (HMAC_CTX *)cp;
+	HMAC_Update(ctx, (OCTSTR)s.string(), s.length());
+}
+
+PvOctets *MfSCTPAuth::result(OCTSTR cp, const PObjectList &) const {
+	HMAC_CTX *ctx = (HMAC_CTX *)cp;
+	uint32_t len = HMAC_MAX_MD_CBLOCK;
+	octet m[HMAC_MAX_MD_CBLOCK];
+	PvOctets *rc = new PvOctets(length_);
+	OCTSTR os = rc->buffer();
+
+	HMAC_Final(ctx, m, &len);
+	memcpy(os, m, length_);
+	HMAC_cleanup(ctx);
+
+	return(rc);
+}
+
+PObject *MfSCTPAuth::tokenObject(int l, CSTR f) const {
+	return(new PfSCTPAuth(this, f, l));
+}
+
+bool MfSCTPAuth::hex_pton(OCTSTR dst, uint32_t dstlen, CSTR src, uint32_t srclen) const {
+	bool upper = true;
+	const char xdigits_l[] = "0123456789abcdef", xdigits_u[] = "0123456789ABCDEF", *xdigits = 0;
+	uint32_t x = 0, y = 0;
+
+	memset(dst, 0, dstlen);
+
+	for(x = 0, y = 0; ((x < srclen) && (y < dstlen)); x++) {
+		const char *cptr = 0;
+
+		if((cptr = strchr((xdigits = xdigits_l), src[x])) == 0) {
+			if((cptr = strchr((xdigits = xdigits_u), src[x])) == 0) {
+				return false;
+			}
+		}
+
+		if(upper) {
+			dst[y] = (cptr - xdigits) << 4;
+			upper = false;
+		} else {
+			dst[y] |= (cptr - xdigits);
+			upper = true;
+			y++;
+		}
+	}
+
+	return true;
+}
+
+bool MfSCTPAuth::isHexStr(CSTR buf, uint32_t buflen) const {
+	uint32_t d = 0;
+
+	for(d = 0; d < buflen; d++) {
+		if((buf[d] < '0') || (buf[d] > '9') &&
+		   (buf[d] < 'A') || (buf[d] > 'F') &&
+		   (buf[d] < 'a') || (buf[d] > 'f')) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+#undef SCTP_SHA1_SIG_SIZE
+#undef SCTP_SHA256_SIG_SIZE
 
 //======================================================================
 MvSubstr::MvSubstr(CSTR s):MvOctets(s) {}
