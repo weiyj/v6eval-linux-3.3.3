@@ -158,8 +158,12 @@ sub add_esp_kame() {
 		$cmd .= " -E $rOpt_ealgo \"$rOpt_ealgokey\"";
 	}
 
-	if ($rOpt_eauth ne undef && $rOpt_eauthkey ne undef) {
-		$cmd .= " -A $rOpt_eauth \"$rOpt_eauthkey\"";
+	if ($rOpt_eauth ne undef) {
+		if ($rOpt_eauthkey eq 1) {
+			$cmd .= " -A $rOpt_eauth";
+		} elsif ($rOpt_eauthkey ne undef) {
+			$cmd .= " -A $rOpt_eauth \"$rOpt_eauthkey\"";
+		}
 	}
 
 	$cmd .= ";";
