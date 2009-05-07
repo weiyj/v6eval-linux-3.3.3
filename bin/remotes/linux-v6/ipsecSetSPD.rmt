@@ -146,6 +146,9 @@ if ($rOpt_upperspec eq "icmp6") {
 	}
 }
 
+$rOpt_src = "::/0" if ($rOpt_src eq "any");
+$rOpt_dst = "::/0" if ($rOpt_dst eq "any");
+
 #----------------------------------------------------------------------
 
 $setkey_cmd = "spdadd $rOpt_src$rOpt_sport $rOpt_dst$rOpt_dport $rOpt_upperspec -P $rOpt_direction";
