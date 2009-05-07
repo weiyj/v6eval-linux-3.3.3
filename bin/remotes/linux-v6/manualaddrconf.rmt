@@ -73,7 +73,7 @@ if ($rOpt_addrfamily eq "inet6") {
     elsif ($rOpt_type eq "delete") {
 	rCommand("ifconfig $rOpt_if ".
 		 "$rOpt_addrfamily ".
-		 "delete ".
+		 "del ".
 		 "$rOpt_addr/$rOpt_len",
 		 15) || goto error;
     }
