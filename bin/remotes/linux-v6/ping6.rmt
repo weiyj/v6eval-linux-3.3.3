@@ -50,9 +50,11 @@ rOpen() || goto error;
 $NUTif = $rOpt_if;
 $dstaddress = $rOpt_addr;
 $rOpt_timeout = 5 if ! defined $rOpt_timeout;
+$rOpt_size = 2 if ! defined($rOpt_size);
+$rOpt_count = 1 if ! defined($rOpt_count);
 
 $pingpath = "ping6";
-$pingopt  = "-n -c 1 -i 1 -s 2 -p 00 -w 2";
+$pingopt  = "-n -c $rOpt_count -i 1 -s $rOpt_size -M want -p 00 -w 2";
 $ifopt    = "-I $NUTif" if $NUTif ne "";
 
 rLogin($rOpt_timeout) || goto error;
