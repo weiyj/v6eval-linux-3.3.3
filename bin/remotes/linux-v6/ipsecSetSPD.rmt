@@ -100,8 +100,8 @@ if ($rOpt_policy eq "ipsec") {
 		goto error;
 	}
 
-	if ($rOpt_direction !~ /in|out/) {
-		print STDERR "direction must be one of in|out\n";
+	if ($rOpt_direction !~ /in|out|fwd/) {
+		print STDERR "direction must be one of in|out|fwd\n";
 		usage();
 		goto error;
 	}
@@ -264,7 +264,7 @@ sub usage() {
 	print STDERR "sport=source port (default:any)\n";
 	print STDERR "dport=destination port (default:any)\n";
 	print STDERR "upperspec={any|tcp|udp|sctp|dccp|icmp6} (default:any)\n";
-	print STDERR "direction={in|out}\n";
+	print STDERR "direction={in|out|fwd}\n";
 	print STDERR "protocol={ah|esp|ah-esp}\n";
 	print STDERR "mode={transport|tunnel}\n";
 	print STDERR "policy={ipsec|none|discard} (default:ipsec)\n";
