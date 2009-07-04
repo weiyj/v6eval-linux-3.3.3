@@ -86,7 +86,7 @@ $rOpt_pltime=604800
     if ! defined($rOpt_pltime);
 #
 $rOpt_mtu=1500
-    if ! defined($rOpt_mut);
+    if ! defined($rOpt_mtu);
 
 #
 $rtadv_tmpl="$type".".rtadvd.tmpl";
@@ -129,7 +129,7 @@ error:
 sub mkconf()
 {
     my $conffile = "";
-    print "Make rtadvd.conf\n" if $V6evalRemote::debug;
+    print "Make radvd.conf\n" if $V6evalRemote::debug;
     if(open(IN, "$rtadv_tmpl") == 0) {
 	print STDERR "$rtadv_tmpl: $!\n";
 	goto error;
@@ -138,9 +138,27 @@ sub mkconf()
 	print STDERR "$rtadv_conf: $!\n";
 	goto error;
     }
+	my($manflag)="off";
+	my($othconfflag)="off";
+	my($onlinkflag)="on";
+	my($autoflag)="on";
+	my($advsend0)="on";
+	my($advsend1)="on";
+	if(!$rOpt_link0) {
+		$rOpt_link0="eth0";
+		$advsend0="off";
+	}
+	if(!$rOpt_link1) {
+		$rOpt_link1="eth1";
+		$advsend1="off";
+	}
+
     while(<IN>) {
 	s/LINK0/$rOpt_link0/;
 	s/LINK1/$rOpt_link1/;
+	s/ADVSEND0/AdvSendAdvert $advsend0/;
+	s/ADVSEND1/AdvSendAdvert $advsend1/;
+
 	#
 	s/MAXINTERVAL/MaxRtrAdvInterval $rOpt_maxinterval/;
 	s/MININTERVAL/MinRtrAdvInterval $rOpt_mininterval/;
@@ -149,12 +167,22 @@ sub mkconf()
 #	s/RLTIME/rltime#$rOpt_rltime/;
 #	s/RTIME/rtime#$rOpt_rtime/;
 #	s/RETRANS/retrans#$rOpt_retrans/;
+	s/CHLIM/AdvCurHopLimit $rOpt_chlim/;
+	s/MANFLAG/AdvManagedFlag $manflag/;
+	s/OTHCONFFLAG/AdvOtherConfigFlag $othconfflag/;
+	s/RLTIME/AdvDefaultLifetime $rOpt_rltime/;
+	s/RTIME/AdvReachableTime $rOpt_rtime/;
+	s/RETRANS/AdvRetransTimer $rOpt_retrans/;
 	#
 #	s/PINFOFLAGS/$rOpt_pinfoflags/;
+	s/ONLINKFLAG/AdvOnLink $onlinkflag/;
+	s/AUTOFLAG/AdvAutonomous $autoflag/;
+
 	s/VLTIME/AdvValidLifetime $rOpt_vltime/;
 	s/PLTIME/AdvPreferredLifetime $rOpt_pltime/;
 	#
 #	s/MTU/mut#$rOpt_mtu/;
+	s/MTU/AdvLinkMTU $rOpt_mtu/;
 	#
 	print STDERR $_ if $V6evalRemote::debug;
 	print OUT $_;
