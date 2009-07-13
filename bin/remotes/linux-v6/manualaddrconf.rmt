@@ -59,22 +59,24 @@ rOpen() || goto error;
 rLogin($rOpt_timeout) || goto error;
 
 if ($rOpt_addrfamily eq "inet6") {
-    if ($rOpt_type eq "unicast") {
-	rCommand("ifconfig $rOpt_if ".
-		 "$rOpt_addrfamily ".
-		 "add ".
-		 "$rOpt_addr/$rOpt_len",
+    if ($rOpt_type eq "unicast" || $rOpt_type eq "anycast") {
+	rCommand("ip ".
+		 "-f $rOpt_addrfamily ".
+		 "addr add ".
+		 "$rOpt_addr/$rOpt_len ".
+		 "dev $rOpt_if",
 		 15) || goto error;
     }
-    elsif ($rOpt_type eq "anycast") {
-	print "$rOpt_type: not supported type\n";
-	goto notsupported;
-    }
+#    elsif ($rOpt_type eq "anycast") {
+#	print "$rOpt_type: not supported type\n";
+#	goto notsupported;
+#    }
     elsif ($rOpt_type eq "delete") {
-	rCommand("ifconfig $rOpt_if ".
-		 "$rOpt_addrfamily ".
-		 "del ".
-		 "$rOpt_addr/$rOpt_len",
+	rCommand("ip ".
+		 "-f $rOpt_addrfamily ".
+		 "addr del ".
+		 "$rOpt_addr/$rOpt_len ".
+		 "dev $rOpt_if",
 		 15) || goto error;
     }
     else {
