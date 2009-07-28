@@ -94,7 +94,7 @@ if ($rOpt_policy eq "ipsec") {
 		goto error;
 	}
 
-	if ($rOpt_upperspec !~ /any|tcp|udp|icmp6/) {
+	if ($rOpt_upperspec !~ /any|tcp|udp|sctp|dccp|icmp6/) {
 		print STDERR "upperspec must be one of any|tcp|udp|icmp6\n";
 		usage();
 		goto error;
@@ -263,7 +263,7 @@ sub usage() {
 	print STDERR "dst=destination address\n";
 	print STDERR "sport=source port (default:any)\n";
 	print STDERR "dport=destination port (default:any)\n";
-	print STDERR "upperspec={any|tcp|udp|icmp6} (default:any)\n";
+	print STDERR "upperspec={any|tcp|udp|sctp|dccp|icmp6} (default:any)\n";
 	print STDERR "direction={in|out}\n";
 	print STDERR "protocol={ah|esp|ah-esp}\n";
 	print STDERR "mode={transport|tunnel}\n";
