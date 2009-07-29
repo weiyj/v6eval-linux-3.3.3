@@ -260,6 +260,7 @@ dnshdr.body	:	member.def.l. dnsqd.ref. dnsan.ref. dnsns.ref. dnsar.ref.;
 /*----------------------------------------------------------------------*/
 extent.ref.l.:						{$$=0;}
 |			LC member.def.l RC
+|			LC extent.ref.l RC
 |			extent.ref.l;
 extent.ref.l:		extent.ref
 |			extent.ref.l extent.ref;
@@ -285,10 +286,13 @@ algomem.def.l:		algomem.def
 payload.ref.:						{$$=0;}
 |			payload.ref;
 upper.ref.:						{$$=0;}	
+|			LC upper.ref RC
 |			upper.ref;
 header.ref.:						{$$=0;}	
+|			LC header.ref RC
 |			header.ref;
 packet.ref.:						{$$=0;}	
+|			LC packet.ref RC
 |			packet.ref;
 
 isakmp_encryption.ref.	:				{$$ = 0;}	
