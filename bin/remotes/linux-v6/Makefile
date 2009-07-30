@@ -48,7 +48,8 @@ REMOTES=clearnc.rmt clearprefix.rmt cleardefr.rmt reboot.rmt \
 	ipsecClearAll.rmt ipsecEnable.rmt ipsecSetSPD.rmt ipsecSetSAD.rmt \
 	ikeClearAll.rmt ikeConfig.rmt ikeDump.rmt \
 	ikeInitiate.rmt ikeStart.rmt ikeStop.rmt ikeTunnel.rmt \
-	rcommand.rmt rcommandasync.rmt mtuconfig.rmt getfile.rmt putfile.rmt
+	rcommand.rmt rcommandasync.rmt mtuconfig.rmt getfile.rmt putfile.rmt \
+	racontrol.rmt
 
 .PHONY: all depend clean
 all:

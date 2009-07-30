@@ -1,0 +1,233 @@
+#!/usr/bin/perl
+#
+# Copyright (C) 2008, 2009 Fujitsu Limited, All rights reserved.
+# 
+# Redistribution and use of this software in source and binary forms, with 
+# or without modification, are permitted provided that the following 
+# conditions and disclaimer are agreed and accepted by the user:
+# 
+# 1. Redistributions of source code must retain the above copyright 
+# notice, this list of conditions and the following disclaimer.
+# 
+# 2. Redistributions in binary form must reproduce the above copyright 
+# notice, this list of conditions and the following disclaimer in the 
+# documentation and/or other materials provided with the distribution.
+# 
+# 3. Neither the names of the copyrighters, the name of the project which 
+# is related to this software (hereinafter referred to as "project") nor 
+# the names of the contributors may be used to endorse or promote products 
+# derived from this software without specific prior written permission.
+# 
+# 4. No merchantable use may be permitted without prior written 
+# notification to the copyrighters. However, using this software for the 
+# purpose of testing or evaluating any products including merchantable 
+# products may be permitted without any notification to the copyrighters.
+# 
+# 
+# 
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHTERS, THE PROJECT AND 
+# CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING 
+# BUT NOT LIMITED THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS 
+# FOR A PARTICULAR PURPOSE, ARE DISCLAIMED.  IN NO EVENT SHALL THE 
+# COPYRIGHTERS, THE PROJECT OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+# INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR 
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
+# HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
+# CONTRACT,STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
+# THE POSSIBILITY OF SUCH DAMAGE.
+#
+# $TAHI: v6eval/bin/remotes/linux-v6/racontrol.rmt,v 0.1 2009/07/01 09:35:22 weiyj Exp $
+#
+########################################################################
+
+#!/usr/bin/perl
+
+use V6evalRemote;
+
+$rtadvd='/usr/sbin/radvd';
+$configfile='/tmp/radvd.conf';
+
+$rOpt_timeout = 5 if ! defined $rOpt_timeout;
+
+rOpen() || goto error;
+rLogin($rOpt_timeout) || goto error;
+
+raControlMain() || goto error;
+
+rLogout($rOpt_timeout) || goto error;
+
+rClose();
+exit($V6evalRemote::exitPass);
+
+error:
+    rClose();
+    exit($V6evalRemote::exitFail);
+
+
+#------------------------------#
+# raControlMain                #
+#------------------------------#
+sub raControlMain()
+{
+	my @interfaces = ();
+
+	if(raParseOptions(\@interfaces) < 0) {
+		return(-1);
+	}
+
+	if($rOpt_mode eq 'start') {
+		my $cmd = '';
+
+		rCommand("rm -f $configfile", $rOpt_timeout);
+
+		raConfigControl(\$cmd, \@interfaces);
+		rCommand($cmd, $rOpt_timeout);
+		rCommand("cat $configfile", $rOpt_timeout);
+		rCommand("$rtadvd -C $configfile", $rOpt_timeout);
+	} elsif ($rOpt_mode eq 'stop') {
+		rCommand('killall radvd', $rOpt_timeout);
+		rCommand("rm -f $configfile", $rOpt_timeout);
+	}
+
+}
+
+#------------------------------#
+# raParseOptions                 #
+#------------------------------#
+sub raParseOptions($)
+{
+	my ($interfaces) = @_;
+
+	# $rOpt_mode
+	unless(($rOpt_mode eq 'start') || ($rOpt_mode eq 'stop')) {
+		print STDERR "unknown mode -- $rOpt_mode\n";
+		return(-1);
+	}
+
+	# $rOpt_link0, $rOpt_link1
+	if($rOpt_mode eq 'start') {
+		unless(($rOpt_link0) || ($rOpt_link1)) {
+			print STDERR 'at least, '.
+				"one interface must be specified\n";
+			return(-1);
+		}
+
+		if($rOpt_link0) {
+			push(@$interfaces, $rOpt_link0);
+		}
+
+		if($rOpt_link1) {
+			push(@$interfaces, $rOpt_link1);
+		}
+	}
+
+	return(0);
+}
+
+#------------------------------#
+# raConfigControl                #
+#------------------------------#
+sub raConfigControl($)
+{
+	my ($cmd, $interfaces) = @_;
+
+	$$cmd  = "cat > $configfile << EOF\r";
+
+	foreach $interface (@$interfaces) {
+		$$cmd .= "interface $interface\r{\r";
+
+		if(defined($rOpt_maxinterval)) {
+			$$cmd .= "\tMaxRtrAdvInterval $rOpt_maxinterval;\r";
+		}
+
+		if(defined($rOpt_mininterval)) {
+			$$cmd .= "\tMinRtrAdvInterval $rOpt_mininterval;\r";
+		}
+
+		if(defined($rOpt_raflagsM)) {
+			$$cmd .= "\tAdvManagedFlag ";
+			$$cmd .= ($rOpt_raflagsM eq "true") ? "on" : "off";
+			$$cmd .= ";\r";
+		}
+
+		if(defined($rOpt_raflagsO)) {
+			$$cmd .= "\tAdvOtherConfigFlag ";
+			$$cmd .= ($rOpt_raflagsO eq "true") ? "on" : "off";
+			$$cmd .= ";\r";
+		}
+
+		if(defined($rOpt_mtu)) {
+			$$cmd .= "\tAdvLinkMTU $rOpt_mtu;\r";
+		}
+
+		if(defined($rOpt_chlim)) {
+			$$cmd .= "\tAdvCurHopLimit $rOpt_chlim;\r";
+		}
+
+		if(defined($rOpt_rtime)) {
+			$$cmd .= "\tAdvReachableTime $rOpt_rtime;\r";
+		}
+
+		if(defined($rOpt_retrans)) {
+			$$cmd .= "\tAdvRetransTimer $rOpt_retrans;\r";
+		}
+
+		if(defined($rOpt_hapref)) {
+			$$cmd .= "\tHomeAgentPreference $rOpt_hapref;\r";
+		}
+
+		if(defined($rOpt_hatime)) {
+			$$cmd .= "\tHomeAgentLifetime $rOpt_hatime;\r";
+		}
+
+		goto out;
+		if(defined($rOpt_prefix) || defined($rOpt_pltime) || defined($rOpt_vltime) ||
+		    defined($pinfoflagsL) || defined($pinfoflagsA)) {
+			$rOpt_prefix = "::/64" if (!defined($rOpt_prefix));
+
+			$$cmd .= "\tprefix $rOpt_prefix\r{\r";
+
+			if(defined($pinfoflagsL)) {
+				$$cmd .= "\t\tAdvOnLink ";
+				$$cmd .= ($rOpt_raflagsO eq "true") ? "on" : "off";
+				$$cmd .= ";\r";
+			}
+
+			if(defined($pinfoflagsA)) {
+				$$cmd .= "\t\tAdvAutonomous ";
+				$$cmd .= ($rOpt_raflagsO eq "true") ? "on" : "off";
+				$$cmd .= ";\r";
+			}
+
+			if(defined($rOpt_pltime)) {
+				$$cmd .= "\t\tAdvPreferredLifetime $rOpt_pltime;\r";
+			}
+
+			if(defined($rOpt_vltime)) {
+				$$cmd .= "\t\tAdvValidLifetime $rOpt_vltime;\r";
+			}
+			$$cmd .= "\t};\r";
+		}
+
+		if(defined($rOpt_router) || defined($rOpt_rltime)) {
+			$rOpt_router = "::/64" if (!defined($rOpt_router));
+
+			$$cmd .= "	route $rOpt_router\r{\r";
+
+			if(defined($rOpt_rltime)) {
+				$$cmd .= "\t\tAdvRouteLifetime $rOpt_rltime;\r";
+			}
+
+			$$cmd .= "\r};\r";
+		}
+out:
+		$$cmd .= "};\r";
+	}
+	$$cmd .= "EOF\r";
+}
+
+########################################################################
+
+
