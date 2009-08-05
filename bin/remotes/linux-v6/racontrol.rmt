@@ -146,6 +146,14 @@ sub raConfigControl($)
 			$$cmd .= "\tMinRtrAdvInterval $rOpt_mininterval;\r";
 		}
 
+		if(defined($rOpt_raflagsA)) {
+			$$cmd .= "\tAdvSendAdvert ";
+			$$cmd .= ($rOpt_raflagsA eq "true") ? "on" : "off";
+			$$cmd .= ";\r";
+		} else {
+			$$cmd .= "\tAdvSendAdvert on\r;";
+		}
+
 		if(defined($rOpt_raflagsM)) {
 			$$cmd .= "\tAdvManagedFlag ";
 			$$cmd .= ($rOpt_raflagsM eq "true") ? "on" : "off";
