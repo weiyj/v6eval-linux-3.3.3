@@ -812,7 +812,7 @@ McChunkData* McChunkData::create(CSTR key){
 	int32_t type = mc->optionType();
 	mc->type_member(new MmUint("Type", 	8, UN(type), UN(type)));
 	mc->member(new MmUint("Reserved",	4, UN(0), UN(0)));
-	mc->member(new MmUint("IFlag",		1, UN(0), UN(0)));
+	mc->member(new MmUint("IFlag",		1, UN(0), EVALANY()));
 	mc->member(new MmUint("UFlag", 		1, UN(0), UN(0)));
 	mc->member(new MmUint("BFlag", 		1, UN(1), UN(1)));
 	mc->member(new MmUint("EFlag", 		1, UN(1), UN(1)));
@@ -1410,10 +1410,12 @@ McErrorCauseANY* McErrorCauseANY::create(CSTR key){
 
 McErrorInvalidStreamIndentifier* McErrorInvalidStreamIndentifier::create(CSTR key){
 	McErrorInvalidStreamIndentifier* mc = new McErrorInvalidStreamIndentifier(key);
+	int32_t code = mc->optionType();
 
-	mc->common_member();
+	mc->code_member(new MmUint( "Code",	16, UN(code),UN(code)));
+	mc->length_member(new MmUint( "Length",	16, GENEHC(mc,McErrorCause,Length), UN(8)));
 	mc->member(new MmUint("Identifier", 	16, UN(0), UN(0)));
-	mc->member(new MmUint("Reserved", 		16, UN(0), UN(0)));
+	mc->member(new MmUint("Reserved", 	16, UN(0), UN(0)));
 
 	MmErrorCause::add(mc);
 	return mc;
