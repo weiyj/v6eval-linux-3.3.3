@@ -267,6 +267,9 @@ McOpt_ICMPv6_AdvInterval::~McOpt_ICMPv6_AdvInterval() {}
 McOpt_ICMPv6_HomeAgentInfo::McOpt_ICMPv6_HomeAgentInfo(CSTR key):McOpt_ICMPv6(key) {}
 McOpt_ICMPv6_HomeAgentInfo::~McOpt_ICMPv6_HomeAgentInfo() {}
 
+McOpt_ICMPv6_RecursiveDNSServer::McOpt_ICMPv6_RecursiveDNSServer(CSTR key):McOpt_ICMPv6(key) {}
+McOpt_ICMPv6_RecursiveDNSServer::~McOpt_ICMPv6_RecursiveDNSServer() {}
+
 McOpt_ICMPv6_RouteInfo::McOpt_ICMPv6_RouteInfo(CSTR key): McOpt_ICMPv6(key) {}
 McOpt_ICMPv6_RouteInfo::~McOpt_ICMPv6_RouteInfo() {}
 
@@ -331,6 +334,19 @@ bool MmMLDv2AddrRecord_onICMPv6::overwrite_DictType(
 ////////////////////////////////////////////////////////////////////////////////
 #define MLDV2OFFSET	28 // (Type Code Checksum MaxResponseCode Resv McastAddr ... NumOfSources ) = 28 Byte
 #define MLDV2ADDRLEN	16 //address record length
+
+uint32_t McOpt_ICMPv6_RecursiveDNSServer::HC_MLC(Addr)(const ItPosition &at, OCTBUF &buf) const {
+	uint32_t count, len;
+	if(length_) {
+		len = length_->value(at, buf);
+		count = (len - 1) / 2;
+	} else {
+		len = buf.remainLength(at.bytes());
+		count = (len - 8) / 16;
+	}
+
+	return(count);
+}
 
 // MLDv1
 McUpp_ICMPv6_MLDQuery::McUpp_ICMPv6_MLDQuery(CSTR key):McUpp_ICMPv6(key) {}

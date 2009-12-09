@@ -232,6 +232,7 @@ McObject::initialize()
 	LEXADD(McOpt_ICMPv6_MTU,		"Opt_ICMPv6_MTU" );
 	LEXADD(McOpt_ICMPv6_AdvInterval,	"Opt_ICMPv6_AdvInterval");
 	LEXADD(McOpt_ICMPv6_HomeAgentInfo,	"Opt_ICMPv6_HomeAgentInfo");
+	LEXADD(McOpt_ICMPv6_RecursiveDNSServer,	"Opt_ICMPv6_RDNSS");
 	LEXADD(McOpt_ICMPv6_RouteInfo,		"Opt_ICMPv6_RouteInfo");
 
 	// Mobility Header
@@ -1371,6 +1372,28 @@ McOpt_ICMPv6_HomeAgentInfo::create(CSTR key)
 	return(mc);
 }
 
+////////////////////////////////////////
+//  Recursive DNS Server Option     //
+////////////////////////////////////////
+McOpt_ICMPv6_RecursiveDNSServer *
+McOpt_ICMPv6_RecursiveDNSServer::create(CSTR key)
+{
+	McOpt_ICMPv6_RecursiveDNSServer *mc = new McOpt_ICMPv6_RecursiveDNSServer(key);
+
+	mc->common_member();
+	mc->member(new MmUint("Reserved",	16,	UN(0),	UN(0)));
+	mc->member(new MmUint("Lifetime",	32,	UN(0),	UN(0)));
+	mc->member(
+		new MmMultiple(
+			new MmV6Addr("Address", MUST(), MUST()),
+			(METH_HC_MLC)&McOpt_ICMPv6_RecursiveDNSServer::HC_MLC(Addr)
+		)
+	);
+
+	MmOption_onICMPv6::add(mc);
+
+	return(mc);
+}
 
 
 //

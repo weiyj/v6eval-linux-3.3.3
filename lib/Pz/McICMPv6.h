@@ -84,6 +84,7 @@ const int32_t TP_Opt_ICMPv6_Redirected		=4;
 const int32_t TP_Opt_ICMPv6_MTU			=5;
 const int32_t TP_Opt_ICMPv6_AdvInterval		=7;
 const int32_t TP_Opt_ICMPv6_HomeAgentInfo	=8;
+const int32_t TP_Opt_ICMPv6_RDNSS		=25;
 
 #ifndef TBD_OPT_ROUTE_INFO
 #define TBD_OPT_ROUTE_INFO	200
@@ -438,6 +439,20 @@ class McOpt_ICMPv6_HomeAgentInfo: public McOpt_ICMPv6 {
 		int32_t optionType() const {
 			return(TP_Opt_ICMPv6_HomeAgentInfo);
 		}
+};
+
+class McOpt_ICMPv6_RecursiveDNSServer: public McOpt_ICMPv6 {
+	public:
+		McOpt_ICMPv6_RecursiveDNSServer(CSTR);
+		virtual	~McOpt_ICMPv6_RecursiveDNSServer();
+
+		static McOpt_ICMPv6_RecursiveDNSServer *create(CSTR);
+
+		int32_t optionType() const {
+			return(TP_Opt_ICMPv6_RDNSS);
+		}
+
+		DEC_HC_MLC(Addr);
 };
 
 class McOpt_ICMPv6_RouteInfo: public McOpt_ICMPv6 {
