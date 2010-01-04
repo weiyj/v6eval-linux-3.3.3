@@ -2,7 +2,7 @@
 
 use V6evalRemote;
 
-$rOpt_timeout = 5 if ! defined $rOpt_timeout;
+$rOpt_timeout = 15 if ! defined $rOpt_timeout;
 
 rOpen() || goto error;
 rLogin($rOpt_timeout) || goto error;
