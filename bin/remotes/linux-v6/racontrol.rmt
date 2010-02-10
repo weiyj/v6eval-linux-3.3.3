@@ -190,22 +190,35 @@ sub raConfigControl($)
 			$$cmd .= "\tHomeAgentLifetime $rOpt_hatime;\r";
 		}
 
-		goto out;
-		if(defined($rOpt_prefix) || defined($rOpt_pltime) || defined($rOpt_vltime) ||
-		    defined($pinfoflagsL) || defined($pinfoflagsA)) {
-			$rOpt_prefix = "::/64" if (!defined($rOpt_prefix));
+		if(defined($rOpt_pltime) || defined($rOpt_vltime) ||
+		    defined($rOpt_pinfoflagsL) || defined($rOpt_pinfoflagsA)) {
+			if (defined($rOpt_link0) && $interface eq $rOpt_link0) {
+				if (!defined($rOpt_link0_prefix)) {
+					$rOpt_prefix = "3ffe:501:ffff:100::";
+				} else {
+					$rOpt_prefix = $rOpt_link0_prefix;
+				}
+			} elsif (defined($rOpt_link1) && $interface eq $rOpt_link1) {
+				if (!defined($rOpt_link1_prefix)) {
+					$rOpt_prefix = "3ffe:501:ffff:101::";
+				} else {
+					$rOpt_prefix = $rOpt_link1_prefix;
+				}
+			} else {
+				$rOpt_prefix = "::";
+			}
 
-			$$cmd .= "\tprefix $rOpt_prefix\r{\r";
+			$$cmd .= "\tprefix $rOpt_prefix/64\r{\r";
 
-			if(defined($pinfoflagsL)) {
+			if(defined($rOpt_pinfoflagsL)) {
 				$$cmd .= "\t\tAdvOnLink ";
-				$$cmd .= ($rOpt_raflagsO eq "true") ? "on" : "off";
+				$$cmd .= ($rOpt_pinfoflagsL eq "true") ? "on" : "off";
 				$$cmd .= ";\r";
 			}
 
-			if(defined($pinfoflagsA)) {
+			if(defined($rOpt_pinfoflagsA)) {
 				$$cmd .= "\t\tAdvAutonomous ";
-				$$cmd .= ($rOpt_raflagsO eq "true") ? "on" : "off";
+				$$cmd .= ($rOpt_pinfoflagsA eq "true") ? "on" : "off";
 				$$cmd .= ";\r";
 			}
 
@@ -230,7 +243,6 @@ sub raConfigControl($)
 
 			$$cmd .= "\r};\r";
 		}
-out:
 		$$cmd .= "};\r";
 	}
 	$$cmd .= "EOF\r";
