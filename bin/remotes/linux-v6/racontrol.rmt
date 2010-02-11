@@ -194,47 +194,42 @@ sub raConfigControl($)
 			$$cmd .= "\tHomeAgentLifetime $rOpt_hatime;\r";
 		}
 
-		if(defined($rOpt_pltime) || defined($rOpt_vltime) ||
-		    defined($rOpt_pinfoflagsL) || defined($rOpt_pinfoflagsA)) {
-			if (defined($rOpt_link0) && $interface eq $rOpt_link0) {
-				if (!defined($rOpt_link0_prefix)) {
-					$rOpt_prefix = "3ffe:501:ffff:100::";
-				} else {
-					$rOpt_prefix = $rOpt_link0_prefix;
-				}
-			} elsif (defined($rOpt_link1) && $interface eq $rOpt_link1) {
-				if (!defined($rOpt_link1_prefix)) {
-					$rOpt_prefix = "3ffe:501:ffff:101::";
-				} else {
-					$rOpt_prefix = $rOpt_link1_prefix;
-				}
+		if (defined($rOpt_link0) && $interface eq $rOpt_link0) {
+			if (!defined($rOpt_link0_prefix)) {
+				$rOpt_prefix = "3ffe:501:ffff:100::";
 			} else {
-				$rOpt_prefix = "::";
+				$rOpt_prefix = $rOpt_link0_prefix;
 			}
-
-			$$cmd .= "\tprefix $rOpt_prefix/64\r{\r";
-
-			if(defined($rOpt_pinfoflagsL)) {
-				$$cmd .= "\t\tAdvOnLink ";
-				$$cmd .= ($rOpt_pinfoflagsL eq "true") ? "on" : "off";
-				$$cmd .= ";\r";
+		} elsif (defined($rOpt_link1) && $interface eq $rOpt_link1) {
+			if (!defined($rOpt_link1_prefix)) {
+				$rOpt_prefix = "3ffe:501:ffff:101::";
+			} else {
+				$rOpt_prefix = $rOpt_link1_prefix;
 			}
-
-			if(defined($rOpt_pinfoflagsA)) {
-				$$cmd .= "\t\tAdvAutonomous ";
-				$$cmd .= ($rOpt_pinfoflagsA eq "true") ? "on" : "off";
-				$$cmd .= ";\r";
-			}
-
-			if(defined($rOpt_pltime)) {
-				$$cmd .= "\t\tAdvPreferredLifetime $rOpt_pltime;\r";
-			}
-
-			if(defined($rOpt_vltime)) {
-				$$cmd .= "\t\tAdvValidLifetime $rOpt_vltime;\r";
-			}
-			$$cmd .= "\t};\r";
 		}
+
+		$$cmd .= "\tprefix $rOpt_prefix/64\r{\r";
+
+		if(defined($rOpt_pinfoflagsL)) {
+			$$cmd .= "\t\tAdvOnLink ";
+			$$cmd .= ($rOpt_pinfoflagsL eq "true") ? "on" : "off";
+			$$cmd .= ";\r";
+		}
+
+		if(defined($rOpt_pinfoflagsA)) {
+			$$cmd .= "\t\tAdvAutonomous ";
+			$$cmd .= ($rOpt_pinfoflagsA eq "true") ? "on" : "off";
+			$$cmd .= ";\r";
+		}
+
+		if(defined($rOpt_pltime)) {
+			$$cmd .= "\t\tAdvPreferredLifetime $rOpt_pltime;\r";
+		}
+
+		if(defined($rOpt_vltime)) {
+			$$cmd .= "\t\tAdvValidLifetime $rOpt_vltime;\r";
+		}
+		$$cmd .= "\t};\r";
 
 		if(defined($rOpt_router) || defined($rOpt_rtltime)) {
 			$rOpt_router = "::/64" if (!defined($rOpt_router));
