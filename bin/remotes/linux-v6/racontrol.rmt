@@ -151,7 +151,7 @@ sub raConfigControl($)
 			$$cmd .= ($rOpt_raflagsA eq "true") ? "on" : "off";
 			$$cmd .= ";\r";
 		} else {
-			$$cmd .= "\tAdvSendAdvert on\r;";
+			$$cmd .= "\tAdvSendAdvert on;\r";
 		}
 
 		if(defined($rOpt_raflagsM)) {
