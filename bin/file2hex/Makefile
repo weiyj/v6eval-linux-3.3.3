@@ -44,12 +44,21 @@
 #
 ########################################################################
 
-PROG=	file2hex
-SRCS=	file2hex.c
-CFLAGS+=	-Wall -g
-NOMAN=
-NO_MAN=
-CLEANFILES+=	.depend
+SRCS= file2hex.c
+PROG = file2hex
 
-.include "../Makefile.inc"
-.include "bsd.prog.mk"
+INSTALL = /usr/bin/install -c
+
+.PHONY: all
+all: ${PROG}
+
+${PROG}: ${SRCS}
+
+.PHONY: install
+install: ${PROG}
+	$(INSTALL) ${PROG} ${PREFIX}/bin/${PROG}
+
+.PHONY: clean
+clean:
+	rm -f ${PROG}
+

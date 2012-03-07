@@ -1,14 +1,32 @@
-LIB=	Pkt
-YSRCS=	PzParse.y
-SRCS=	$(YSRCS:.y=.cc) LxToken.cc LxLexer.cc RAFControl.cc \
-	PktAgent.cc PktRecv.cc PktClient.cc PktServer.cc StdAgent.cc \
-	BpfAgent.cc Bpfilter.cc Ringbuf.cc RunEnv.cc PktCtlClient.cc \
-	PktSndClient.cc PktRcvClient.cc PktBuf.cc PktQueue.cc bufStat.cc
+LIBS = libPkt.a
+YSRC = PzParse.y
+OBJS = PzParse.o LxToken.o LxLexer.o RAFControl.o \
+	PktAgent.o PktRecv.o PktClient.o PktServer.o StdAgent.o \
+	BpfAgent.o Bpfilter.o Ringbuf.o RunEnv.o PktCtlClient.o \
+	PktSndClient.o PktRcvClient.o PktBuf.o PktQueue.o bufStat.o
 
-CXXFLAGS+=	-I. -I$(Cm) -I$(Pz) -DHAVE_BPF_HDRCMPLT -I/usr/include
-# CXXFLAGS+=	-DVCLEAR_DBG
+Cm = ../Cm
+Pz = ../Pz
 
-CLEANFILES+=	PzParse.h
-CLEANFILES+=	.depend
+CFLAGS+=	-I. -I$(Cm) -I$(Pz) -DHAVE_BPF_HDRCMPLT -pipe -g
+CXXFLAGS+=	${CFLAGS}
 
-.include "bsd.lib.mk"
+.PHONY: all
+all:	${LIBS}
+
+${LIBS}: ${OBJS}
+	$(AR) r $@ $?
+
+PzParse.cc: PzParse.y
+	$(YACC) -d -o PzParse.cc PzParse.y
+	@if [ -e "PzParse.cc.h" ]; \
+		then mv PzParse.cc.h PzParse.h; \
+	fi
+
+.PHONY: install
+install:
+
+.PHONY: clean
+clean:
+	- rm -f ${LIBS} *.o PzParse.cc PzParse.h
+

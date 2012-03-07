@@ -54,7 +54,11 @@
 #include "PAlgorithm.h"
 #include "RAFControl.h"
 #include <stdio.h>
+#if defined(__linux__)
+#include "bpf.h"
+#else
 #include <net/bpf.h>
+#endif
 
 PktRcvClient::PktRcvClient(const McObject* m,AlgorithmFrames& l):PktClient(),
 	reverser_(m),candidates_(l),evalc(1) {}

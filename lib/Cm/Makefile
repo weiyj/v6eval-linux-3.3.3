@@ -1,12 +1,24 @@
-LIB=	Cm
-SRCS=	CmTypes.cc \
-	BtObject.cc BtArray.cc BtList.cc BtSet.cc \
-	CmQueue.cc CmAgent.cc CmMain.cc CmSocket.cc \
-	CmFdSet.cc CmFdMasks.cc CmString.cc PerfCollect.cc \
-	Timer.cc CmDispatch.cc CmReceiver.cc timeval.cc \
-	CmToken.cc CmMatch.cc CmLexer.cc
+LIBS = libCm.a
+OBJS =	CmTypes.o \
+	BtObject.o BtArray.o BtList.o BtSet.o \
+	CmQueue.o CmAgent.o CmMain.o CmSocket.o \
+	CmFdSet.o CmFdMasks.o CmString.o PerfCollect.o \
+	Timer.o CmDispatch.o CmReceiver.o timeval.o \
+	CmToken.o CmMatch.o CmLexer.o
 
-CXXFLAGS+=	-I. 
-CLEANFILES+=	.depend
+CFLAGS+=	-O0 -pipe -g -DYYDEBUG
+CXXFLAGS+=	${CFLAGS}
 
-.include "bsd.lib.mk"
+.PHONY: all
+all:	${LIBS}
+
+${LIBS}: ${OBJS}
+	$(AR) r $@ $?
+
+.PHONY: install
+install:
+
+.PHONY: clean
+clean:
+	- rm -f ${LIBS} *.o
+

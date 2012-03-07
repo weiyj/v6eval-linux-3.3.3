@@ -55,6 +55,7 @@
 #include "CmTypes.h"
 
 #if !defined(__KAME__) 
+#if !defined(__linux__)
 struct  in6_addr {
 	union {
 		uint8_t   u6_addr8[16];
@@ -69,7 +70,12 @@ struct sockaddr_in6 {
 	uint32_t	sin6_scope_id;	/* intface scope id */
 };
 #define	s6_addr		u6_addr.u6_addr8
+#endif
 #define getipnodebyname(a,b,c,d)0
+#endif
+
+#if defined(__linux__)
+#define SO_REUSEPORT 15
 #endif
 
 #ifndef IN6_IS_ADDR_LINKLOCAL

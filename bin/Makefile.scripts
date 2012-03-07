@@ -1,0 +1,17 @@
+INSTALL = /usr/bin/install -c
+
+.PHONY: all
+all: ${PROG}
+
+${PROG}: ${SRCS}
+	cp ${SRCS} ${PROG}
+	chmod +x ${PROG}
+
+.PHONY: install
+install: ${PROG}
+	$(INSTALL) ${PROG} ${PREFIX}/bin/${PROG}
+
+.PHONY: clean
+clean:
+	rm -f ${PROG}
+

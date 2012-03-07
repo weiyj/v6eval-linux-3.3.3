@@ -61,6 +61,7 @@ class PrItem {
 	const char*	name_;	//Item name
 public:
 	PrItem(const char* name=0):name_(name){}
+virtual	~PrItem(){};
 	const char* get_name()const{return name_;}
 	bool check_remainLength(const ItP& reqlen,
 			const ItP& at,const PvOctets& buf)const;
@@ -77,6 +78,7 @@ class PrUint :public PrItem{//Uint member printer
 	uint32_t	width_;	//bits width
 public:
 	PrUint(uint32_t width,const char* name):PrItem(name),width_(width){}
+virtual ~PrUint(){};
 	uint32_t get_value(const ItP& at,const PvOctets& buf)const;
 	void step(ItP& at)const{at.addBits(width_);}
 	bool print(uint32_t t,ItP& at,const PvOctets& buf)const;
@@ -96,6 +98,7 @@ static	const PVADDR&	base(){	//PvAddr base object
 #endif
 public:
 	PrAddr(const char* name):PrItem(name){}
+virtual ~PrAddr(){};
 	void step(ItP& at)const{at.addBytes(base().length());}
 	bool print(uint32_t t,ItP& at,const PvOctets& buf)const;
 };
@@ -122,6 +125,7 @@ typedef PrAddr<PvEther>		PrEther;
 class PrData :public PrItem{//Variable OctetsData member printer
 public:
 	PrData(const char* name):PrItem(name){}
+virtual ~PrData(){};
 	bool print(uint32_t t,ItP& at,const PvOctets& buf)const;
 };
 
@@ -138,6 +142,7 @@ virtual	bool print_head(uint32_t t,uint32_t length)const;
 virtual	bool print_body(uint32_t t,ItP& at,const PvOctets& bodybuf)const;
 static	bool print_remain_Needless(uint32_t t,ItP& at,const PvOctets& bodybuf);
 public:
+virtual ~PrCompound(){};
 virtual	uint32_t length_for_pr(const ItP& at,const PvOctets& buf)const;
 	bool print(uint32_t t,ItP& at,const PvOctets& buf)const;
 	bool print_remain_more0(uint32_t t,ItP& at,const PvOctets& buf)const;
@@ -149,6 +154,7 @@ private:
 	PrData	data_;
 public:
 	PrNeedless():PrCompound("[Needless]"),data_("data"){}
+virtual ~PrNeedless(){};
 	uint32_t length_for_pr(const ItP& at,const PvOctets& buf)const{
 		return buf.remainLength(at.bytes());}//all remain
 	bool print_body(uint32_t t,ItP& at,const PvOctets& buf)const{

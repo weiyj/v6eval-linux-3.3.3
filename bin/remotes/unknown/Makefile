@@ -43,7 +43,6 @@
 
 PRODUCT=unknown
 
-PREFIX=/usr/local/v6eval
 RMTDIR=$(PREFIX)/bin/$(PRODUCT)
 REMOTES=	cleardefr.rmt		\
 		clearmtu.rmt		\
@@ -96,10 +95,12 @@ REMOTES=	cleardefr.rmt		\
 		tunnel.rmt		\
 		useTempAddr.rmt
 
+.PHONY: all depend clean
 all:
 depend:
 clean:
 
+.PHONY: install
 install:
 	install -d -o bin -g bin -m 755 $(PREFIX)/bin
 	install -d -o bin -g bin -m 755 $(RMTDIR)

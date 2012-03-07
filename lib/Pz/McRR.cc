@@ -186,6 +186,7 @@ public:
 		MaxLen_(	 8,"MaxLen"),
 		Reserved_(	16,"Reserved"),
 		MatchPrefix_(	   "MatchPrefix"){}
+virtual ~PrRR_MatchPrefixPart(){};
 	uint32_t length_for_pr(const ItP&,const PvOctets&)const{
 		return 24;}//fix length
 	uint32_t OpLength_for_pr(const ItP& at,const PvOctets& buf)const{
@@ -233,6 +234,7 @@ public:
 		PFlag_(		 	 1,"PFlag"),
 		Reserved_(	 	30,"Reserved"),
 		UsePrefix_(	 	   "UsePrefix"){}
+virtual ~PrRR_UsePrefixPart(){};
 	uint32_t length_for_pr(const ItP&,const PvOctets&)const{
 		return 32;}//fix length
 	bool print_body(uint32_t t,ItP& at,const PvOctets& buf)const{
@@ -257,6 +259,7 @@ public:
 	PrRR_PrefixControlOperation():PrCompound("PrefixControlOperation"),
 		MatchPrefixPart_(),
 		UsePrefixPart_(){}
+virtual ~PrRR_PrefixControlOperation(){};
 	uint32_t length_for_pr(const ItP& at,const PvOctets& buf)const{
 		return MatchPrefixPart_.OpLength_for_pr(at,buf);}
 	bool print_body(uint32_t t,ItP& at,const PvOctets& buf)const{
@@ -273,6 +276,7 @@ private:
 public:
 	PrRR_CommandMessageBody():PrCompound("CommandMessageBody"),
 		Operation_(){}
+virtual ~PrRR_CommandMessageBody(){};
 static	const PrRR_CommandMessageBody* instance(){
 		if(!instance_)instance_=new PrRR_CommandMessageBody();
 		return instance_;}
@@ -311,7 +315,8 @@ public:
 		Ordinal_(	 8,"Ordinal"),
 		MatchedLen_(	 8,"MatchedLen"),
 		InterfaceIndex_(32,"InterfaceIndex"),
-		MatchedPrefix_(	   "MatchedPrefix"){}
+		MatchedPrefix_(	   "MatchedPrefix"){};
+virtual ~PrRR_ResultMessage(){};
 	uint32_t length_for_pr(const ItP&,const PvOctets&)const{
 		return 24;}//fix length
 	bool print_body(uint32_t t,ItP& at,const PvOctets& buf)const{
@@ -331,7 +336,8 @@ private:
 	PrRR_ResultMessage	Result_;//more than0
 public:
 	PrRR_ResultMessageBody():PrCompound("ResultMessageBody"),
-		Result_(){}
+		Result_(){};
+virtual ~PrRR_ResultMessageBody(){};
 static	const PrRR_ResultMessageBody* instance(){
 		if(!instance_)instance_=new PrRR_ResultMessageBody();
 		return instance_;}
@@ -359,6 +365,7 @@ private:
 	//no member
 public:
 	PrRR_ResetMessageBody():PrCompound("ResetMessageBody"){}
+virtual ~PrRR_ResetMessageBody(){};
 static	const PrRR_ResetMessageBody* instance(){
 		if(!instance_)instance_=new PrRR_ResetMessageBody();
 		return instance_;}
@@ -387,6 +394,7 @@ private:
 public:
 	PrRR_AnyMessageBody():PrCompound("AnyMessageBody"),
 		data_("data"){}
+virtual ~PrRR_AnyMessageBody(){};
 static	const PrRR_AnyMessageBody* instance(){
 		if(!instance_)instance_=new PrRR_AnyMessageBody();
 		return instance_;}

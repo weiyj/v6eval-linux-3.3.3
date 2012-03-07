@@ -34,7 +34,11 @@
 
 #include <sys/cdefs.h>
 #include <sys/types.h>
+#if ! defined(__linux__)
 #include <sys/endian.h>
+#else
+#include <endian.h>
+#endif
 #ifdef _KERNEL
 #include <sys/systm.h>
 #else

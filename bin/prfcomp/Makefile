@@ -44,13 +44,8 @@
 #
 ########################################################################
 
-PROG=	prfcomp
-SRCS=	prfcomp.c
-CFLAGS+=	-Wall -g
-LDADD+=	-lcrypto
-NOMAN=
-NO_MAN=
-CLEANFILES+=	.depend
+PROG = prfcomp
+SRCS = prfcomp.c
 
-.include "../Makefile.inc"
-.include "bsd.prog.mk"
+include ../Makefile.inc
+

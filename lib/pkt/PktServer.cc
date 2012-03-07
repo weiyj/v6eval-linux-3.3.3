@@ -48,7 +48,11 @@
 #include <sys/types.h>
 #include <sys/time.h>
 #include <sys/ioctl.h>
+#if defined(__linux__)
+#include "bpf.h"
+#else
 #include <net/bpf.h>
+#endif
 #include <unistd.h>
 #include "CmDispatch.h"
 #include "CmMain.h"

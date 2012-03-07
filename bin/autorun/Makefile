@@ -1,7 +1,5 @@
+SRCS = autorun.pl
+PROG = autorun
 
-beforeinstall:
-	${INSTALL} -c -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} \
-		${.CURDIR}/autorun.pl ${DESTDIR}${BINDIR}/autorun
-
-.include <bsd.prog.mk>
+include ../Makefile.scripts
 

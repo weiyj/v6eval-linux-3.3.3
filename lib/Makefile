@@ -1,3 +1,8 @@
-SUBDIR=Cm Pz pkt 
-.MAIN: depend all
-.include <bsd.subdir.mk>
+SUBDIRS = Cm Pz pkt
+
+.PHONY: all clean install
+all clean install:
+	@for subdir in $(SUBDIRS); do \
+		$(MAKE) -C $$subdir $@; \
+	done
+

@@ -44,17 +44,8 @@
 #
 ########################################################################
 
-PROG=	sigcomp
-SRCS=	sigcomp.c
-CFLAGS+=	-Wall -g
-LDADD+=	-lcrypto
-NOMAN=
-NO_MAN=
-CLEANFILES+=	.depend
+PROG = sigcomp
+SRCS = sigcomp.c
 
-# CFLAGS+=	-DDEBUG
-# LDFLAGS+=	-L/usr/local/lib
-# LDADD+=	-lefence
+include ../Makefile.inc
 
-.include "../Makefile.inc"
-.include "bsd.prog.mk"

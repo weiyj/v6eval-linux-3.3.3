@@ -333,14 +333,16 @@ virtual PvObject* reversePv(RControl&,
 
 class ICVoverwriter {
 public:
-	ICVoverwriter(){}
+	ICVoverwriter(){};
+virtual ~ICVoverwriter(){};
 virtual	bool overwrite(ICVControl&,
 		const ItPosition& at,OCTBUF& buf,const TObject* t)const;
 };
 
 class ICV_Zero : public ICVoverwriter{
 public:
-	ICV_Zero():ICVoverwriter(){}
+	ICV_Zero():ICVoverwriter(){};
+virtual ~ICV_Zero(){};
 virtual	bool overwrite(ICVControl&,
 		const ItPosition& at,OCTBUF& buf,const TObject* t)const;
 };
@@ -350,6 +352,7 @@ class ICV_HC : public ICVoverwriter{
 public:
 	ICV_HC(const McObject* m,METH_HC_OWICV hc):ICVoverwriter(),
 		meta_(m),METH_HC_OWICV_(hc){}
+virtual ~ICV_HC(){};
 virtual	bool overwrite(ICVControl&,
 		const ItPosition& at,OCTBUF& buf,const TObject* t)const;
 };

@@ -182,7 +182,11 @@
 #define YYPARSE_PARAM_TYPE LxLexer&
 #define yyparse(lex)parse(lex)
 #else
+#if ! defined(__linux__)
 #define	yyparse()parse(LxLexer& lexer)
+#else
+#define	yyparse(void)parse(LxLexer& lexer)
+#endif
 #endif
 #define	yylex()lexer.lex(compound_)
 #define yyerror lexer.yaccError

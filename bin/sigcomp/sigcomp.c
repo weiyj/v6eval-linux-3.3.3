@@ -803,10 +803,12 @@ evp_md_with_algorithm(const char *const type, const char *const algorithm)
 			break;
 		}
 
+#if ! defined(__linux__)
 		if(rsa && !strcmp(algorithm, "mdc2")) {
 			evp_md = EVP_mdc2();
 			break;
 		}
+#endif
 
 		if(rsa && !strcmp(algorithm, "ripemd160")) {
 			evp_md = EVP_ripemd160();

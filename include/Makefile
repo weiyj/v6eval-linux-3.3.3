@@ -45,11 +45,12 @@
 # Makefile for standard definition file
 #
 
-PREFIX=/usr/local/v6eval
 INCLUDEDIR=$(PREFIX)/include/
 
+.PHONY: all
 all:
 
+.PHONY: install
 install:
 	install -d -o bin -g bin -m 755 $(INCLUDEDIR)
 	install -c -o bin -g bin -m 644 std.def       $(INCLUDEDIR)
@@ -57,6 +58,7 @@ install:
 	install -c -o bin -g bin -m 644 stdpacket.def $(INCLUDEDIR)
 	install -c -o bin -g bin -m 644 stdconst.def $(INCLUDEDIR)
 
+.PHONY: depend clean
 depend:
 clean:
 

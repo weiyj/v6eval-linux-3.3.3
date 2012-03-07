@@ -66,7 +66,7 @@ STR PktReceiver::buffer(int32_t l) {
 int PktReceiver::receiveBuffer(STR s,int32_t len) {
 	int32_t rem, l; STR p;
 	for(rem=len,p=s;rem>0;rem-=l,p+=l) {
-		l=socket()->receive(s,rem);
+		l=socket()->receive(p,rem);
 		if(l<0&&errno==EINTR) {l=0; continue;}
 		if(l<=0) return -1;}
 	return len;}

@@ -44,16 +44,7 @@
 #
 ######################################################################
 
-CXXFLAGS+=	-I/usr/local/include
-CXXFLAGS+=	-DTAHI
-LDFLAGS+=	-L/usr/local/lib
-LDADD+=	-lcrypto
-SRCS=	dhgen.cc 
-PROG_CXX=	$(SRCS:.cc=)
-PROG=	${PROG_CXX}
-NOMAN=
-NO_MAN=
-CLEANFILES+=	.depend
+SRCS = dhgen.cc
+PROG = dhgen
 
-.include "../Makefile.inc"
-.include "bsd.prog.mk"
+include ../Makefile.inc

@@ -55,7 +55,11 @@
 #include <sys/types.h>
 #include <sys/uio.h>
 #include <unistd.h>
+#if defined(__linux__)
+#include "bpf.h"
+#else
 #include <net/bpf.h>
+#endif
 
 PktCtlClient::PktCtlClient(StringList pos):PktClient(),
 	command_(pos),parsed_(0) {}

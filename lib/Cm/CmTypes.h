@@ -49,16 +49,18 @@
 #include <ctype.h>
 typedef char *STR;
 typedef const char *CSTR;
-#if defined(__FreeBSD__) || defined(__bsdi__)
+#if defined(__FreeBSD__) || defined(__bsdi__) || defined(__linux__)
 typedef u_int8_t uint8_t;
 typedef u_int16_t uint16_t;
 typedef u_int32_t uint32_t;
 typedef u_int64_t uint64_t;
 #endif
 #if (__FreeBSD__ <= 3) || defined(__bsdi__) || defined(__hpux)
+#if !defined(__linux__)
 typedef int socklen_t;
 #endif
-#if defined(__hpux)
+#endif
+#if defined(__hpux) || defined(__linux__)
 #define SETPGRP(a,b)setpgrp()
 #else
 #define SETPGRP(a,b)setpgrp(a,b)

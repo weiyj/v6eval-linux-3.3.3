@@ -1,12 +1,5 @@
-CXXFLAGS+=	-I${Cm} -I${Pz} -I${pkt} -I/usr/local/include
-LDFLAGS +=	-L${Cm} -L${Pz} -L${pkt} -L/usr/local/lib
-LDADD+=	-lPkt -lPz -lCm  -lcrypto
-SRCS=	pktsend.cc 
-PROG_CXX=	pktsend
-PROG=	${PROG_CXX}
-CLEANFILES+=	.depend
+SRCS = pktsend.cc
+PROG = pktsend
 
-.include "../Makefile.inc"
-.include "bsd.prog.mk"
+include ../Makefile.inc
 
-$(PROG): ${Cm}/libCm.a ${Pz}/libPz.a ${pkt}/libPkt.a

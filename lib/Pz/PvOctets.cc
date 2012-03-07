@@ -67,6 +67,9 @@ int ether_line __P((const char *, struct ether_addr *, char *));
 }
 */
 #endif
+#if defined(__linux__)
+#include <netinet/ether.h>
+#endif
 #include <string.h>
 
 PvOctets::~PvOctets() {
@@ -123,7 +126,11 @@ PvObject* PvEther::shallowCopy() const {
 bool PvEther::pton(CSTR p) {
 	if(p==0) {return false;}
 	struct ether_addr *n=ether_aton((char*)p);
+#if defined(__linux__)
+	if(n!=0) {set(length(),n->ether_addr_octet);}
+#else
 	if(n!=0) {set(length(),n->octet);}
+#endif
 	return (n!=0);}
 PvEther::PvEther(const PvV6Addr& v6,OCTSTR o):PvOctets(sizeof(etheraddr),o) {
 	multicast(v6);}

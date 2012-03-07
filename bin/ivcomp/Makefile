@@ -44,13 +44,8 @@
 #
 ########################################################################
 
-PROG=	ivcomp
-SRCS=	ivcomp.c
-CFLAGS+=	-Wall -g
-LDADD+=	-lcrypto
-NOMAN=
-NO_MAN=
-CLEANFILES+=	.depend
+SRCS = ivcomp.c
+PROG = ivcomp
 
-.include "../Makefile.inc"
-.include "bsd.prog.mk"
+include ../Makefile.inc
+

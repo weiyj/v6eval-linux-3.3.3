@@ -46,12 +46,19 @@
 #define	__Bpfilter_h__	1
 #include <sys/types.h>
 #include <sys/time.h>
+#if defined(__linux__)
+#include "bpf.h"
+#else
 #include <net/bpf.h>
+#endif
 #include "CmString.h"
 struct Bpfilter {
 private:
 	int fd_;
 	uint32_t bufsize_;
+#if defined(__linux__)
+	int ifindex_;
+#endif
 public:
 	Bpfilter(CSTR);
 	int fileDesc() const;

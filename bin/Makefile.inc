@@ -1,14 +1,30 @@
-BINDIR?=	/usr/local/v6eval/bin
-MANDIR=	/usr/local/v6eval/man/man
-l=../../lib
-Cm=$l/Cm
-Pz=$l/Pz
-pkt=$l/pkt
-DEBUG_FLAGS=-g -Wall -Woverloaded-virtual
-.if exists(/usr/local/v6/lib/libinet6.a)
-LDFLAGS	+= -L/usr/local/v6/lib
-LDADD		+= -linet6
-.endif
+Cm = ../../lib/Cm/
+Pz = ../../lib/Pz/
+pkt = ../../lib/pkt/
+CFLAGS += -pipe -g -fno-strict-aliasing
+CPPFLAGS += -I${Cm} -I${Pz} -I${pkt}
+CXXFLAGS+= ${CFLAGS} -Woverloaded-virtual
+LDFLAGS += -L${Cm} -L${Pz} -L${pkt}
+LDLIBS	+= -lPkt -lPz -lCm -lcrypto
 
-.MAIN: depend all
-beforedepend: cleandepend
+INSTALL	= /usr/bin/install -c
+
+%: %.c
+	$(CC) ${CPPFLAGS} ${CFLAGS} $^ ${LDFLAGS} ${LDLIBS} -o $@
+
+%: %.cc
+	$(CXX) ${CPPFLAGS} ${CXXFLAGS} $^ ${LDFLAGS} ${LDLIBS} -o $@
+
+.PHONY: all
+all: ${PROG}
+
+${PROG}: ${SRCS} ${Cm}/libCm.a ${Pz}/libPz.a ${pkt}/libPkt.a
+
+.PHONY: install
+install: ${PROG}
+	$(INSTALL) ${PROG} ${PREFIX}/bin/${PROG}
+
+.PHONY: clean
+clean:
+	rm -f ${PROG}
+

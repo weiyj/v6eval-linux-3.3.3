@@ -52,6 +52,9 @@
 #include <sys/param.h>
 #include <sys/time.h>
 #include <unistd.h>
+#if defined(__linux__)
+#include <time.h>
+#endif
 IfName::IfName(CSTR n,CSTR i,CSTR e):CmCString(n),interface_(i),ether_(e) {}
 IfName::~IfName() {}
 IfName* IfName::create(CSTR n,CSTR i,CSTR m,CSTR file,uint32_t line) {

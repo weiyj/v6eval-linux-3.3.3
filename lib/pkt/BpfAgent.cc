@@ -47,7 +47,11 @@
 #include <sys/types.h>
 #include <sys/time.h>
 #include <sys/ioctl.h>
+#if defined(__linux__)
+#include "bpf.h"
+#else
 #include <net/bpf.h>
+#endif
 #include <stdlib.h>
 #include <string.h>
 #include "debug.h"
@@ -212,7 +216,7 @@ bufStat BpfAgent::stat() const{
 	return rc;}
 
 void BpfAgent::clear() {
-#if 1
+#if ! defined(__linux__)
 	/*
 	  In rare case, clear() function is called before filterd out
 	  all sent packets. So need to wait all sent packets filtered
@@ -226,6 +230,9 @@ xdbg("/tmp/vclear_dbg.txt", "BpfAgent", "this: %p\n", this);
 #endif	// VCLEAR_DBG
 		nonblock_receive(0);
 	}
+#else
+	while(!fifo.IsEmpty())
+		fifo.del();
 #endif
 	rbuf->clear();
 	filter_.flush();}

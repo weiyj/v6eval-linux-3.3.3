@@ -44,16 +44,8 @@
 #
 ########################################################################
 
-PROG=	x509dec
-SRCS=	x509dec.c
-CFLAGS+=	-Wall -g
-LDADD+=	-lcrypto
-NOMAN=
-NO_MAN=
-CLEANFILES+=	.depend
+PROG = x509dec
+SRCS = x509dec.c
 
-# LDFLAGS+=	-L/usr/local/lib
-# LDADD+=	-lefence
+include ../Makefile.inc
 
-.include "../Makefile.inc"
-.include "bsd.prog.mk"

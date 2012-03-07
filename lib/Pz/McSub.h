@@ -49,7 +49,11 @@
 #include "MmObject.h"
 
 #include <sys/time.h>	//for bpf.h
+#if defined(__linux__)
+#include "../pkt/bpf.h"
+#else
 #include <net/bpf.h>
+#endif
 #include <sys/socket.h>
 
 class PControl;

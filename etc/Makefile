@@ -43,16 +43,18 @@
 # Makefile for sample config file
 #
 
-PREFIX=/usr/local/v6eval
 ETCDIR=$(PREFIX)/etc
 SAMPLE=tn.def.sample nut.def.sample
 
+.PHONY: all
 all:
 
+.PHONY: install
 install:
 	install -d -o bin -g bin -m 755 $(ETCDIR)
 	install -c -o bin -g bin -m 644 $(SAMPLE) $(ETCDIR)
 
+.PHONY: depend clean
 depend:
 
 clean:

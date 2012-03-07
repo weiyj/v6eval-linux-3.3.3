@@ -33,6 +33,10 @@
 #define CAMELLIA_BLOCK_SIZE 16
 #define CAMELLIA_SUBKEYWORD 68 /* (34*8/4) */
 
+#if defined(__linux__)
+#include <stdint.h>
+#endif
+
 typedef struct {
     int	bits;				      /* key-length */
     uint32_t subkey[CAMELLIA_SUBKEYWORD]; /* encrypt/decrypt key schedule */

@@ -43,16 +43,23 @@
 # $TAHI: v6eval/bin/remotes/Makefile,v 1.43 2005/05/25 02:08:48 akisada Exp $
 #
 
-SUBDIR=	unknown	\
+SUBDIRS=unknown	\
 	manual
 
 PREFIX=/usr/local/v6eval
 DOCFILES=00README
 
-depend:
+.PHONY: all clean install
+all clean:
+	@for subdir in $(SUBDIRS); do \
+		$(MAKE) -C $$subdir $@; \
+	done
 
-afterinstall:
+.PHONY: install
+install:
 	install -d -o bin -g bin -m 755 $(PREFIX)/bin
 	install -c -o bin -g bin -m 444 $(DOCFILES) $(PREFIX)/bin/
+	@for subdir in $(SUBDIRS); do \
+		$(MAKE) -C $$subdir $@; \
+	done
 
-.include <bsd.subdir.mk>

@@ -1,25 +1,24 @@
-LIB=	Pz
-SRCS=	DmObject.cc ItPosition.cc McAH.cc McARP.cc McAlgorithm.cc	\
-	McDHCPv6.cc McDNS.cc McESP.cc McEther.cc McICMPv4.cc		\
-	McICMPv6.cc McIGMP.cc McIKE.cc McIPv4.cc McIPv6.cc McInit.cc	\
-	McMLDv2.cc McMobility.cc McNoNext.cc McNull.cc McObject.cc	\
-	McRIPng.cc McRR.cc McSIP.cc McSNMP.cc McSub.cc McTCP.cc		\
-	McUDP.cc McVRRP.cc MfAlgorithm.cc MmChecksum.cc MmData.cc	\
-	MmHeader.cc MmObject.cc MvArgCheck.cc MvFunction.cc		\
-	PAlgorithm.cc PControl.cc PObject.cc PcObject.cc PlObject.cc	\
-	PrItem.cc PvAction.cc PvAutoItem.cc PvIfName.cc PvName.cc	\
-	PvObject.cc PvOctets.cc RObject.cc WObject.cc			\
-	rijndael-alg-fst.c rijndael-api-fst.c				\
-	camellia.c camellia-api.c
+LIBS = libPz.a
+OBJS =	DmObject.o ItPosition.o McAH.o McARP.o McAlgorithm.o	\
+	McDHCPv6.o McDNS.o McESP.o McEther.o McICMPv4.o		\
+	McICMPv6.o McIGMP.o McIKE.o McIPv4.o McIPv6.o McInit.o	\
+	McMLDv2.o McMobility.o McNoNext.o McNull.o McObject.o	\
+	McRIPng.o McRR.o McSIP.o McSNMP.o McSub.o McTCP.o	\
+	McUDP.o McVRRP.o MfAlgorithm.o MmChecksum.o MmData.o	\
+	MmHeader.o MmObject.o MvArgCheck.o MvFunction.o		\
+	PAlgorithm.o PControl.o PObject.o PcObject.o PlObject.o	\
+	PrItem.o PvAction.o PvAutoItem.o PvIfName.o PvName.o	\
+	PvObject.o PvOctets.o RObject.o WObject.o		\
+	rijndael-alg-fst.o rijndael-api-fst.o camellia.o camellia-api.o
 
-CXXFLAGS+=	-O0 -I$(Cm) -I.
-CFLAGS+=	-I$(Cm) -I.
+Cm = ../Cm
+CFLAGS+=	-O0 -I$(Cm) -I. -pipe -g -DYYDEBUG
+CXXFLAGS+=	${CFLAGS}
 
 #CXXFLAGS=	-pipe -g -Wall -I./ -I$(Cm)
 #CFLAGS=	-pipe -g -Wall -I./ -I$(Cm) -I/usr/local/include
 
-.PATH: ${.CURDIR}/crypto/rijndael
-.PATH: ${.CURDIR}/crypto/camellia
+VPATH = crypto/rijndael crypto/camellia
 
 # <draft-ietf-nemo-basic-support-03.txt>, NEMO Basic Support
 # CXXFLAGS+=	-DTBD_OPT_MH_MOB_NETWORK_PREF=6
@@ -63,4 +62,17 @@ CFLAGS+=	-I$(Cm) -I.
 # 2.2.1. Extended (64-bit) Sequence Number
 # CXXFLAGS+=	-DESN_DBG
 
-.include "bsd.lib.mk"
+
+.PHONY: all
+all:	${LIBS}
+
+${LIBS}: ${OBJS}
+	$(AR) r $@ $?
+
+.PHONY: install
+install:
+
+.PHONY: clean
+clean:
+	- rm -f ${LIBS} *.o
+
