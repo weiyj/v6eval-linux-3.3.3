@@ -44,7 +44,8 @@
 #
 
 SUBDIRS=unknown	\
-	manual
+	manual \
+	linux-v6
 
 PREFIX=/usr/local/v6eval
 DOCFILES=00README

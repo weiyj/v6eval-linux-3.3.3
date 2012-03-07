@@ -1,0 +1,29 @@
+#!/usr/bin/perl
+#
+# COPYRIGHT FUJITSU LIMITED 2007
+#
+# $Id: rcommandasync.rmt,v 1.1 2008/07/15 04:17:41 WeiYJ Exp $
+#
+######################################################################
+
+use V6evalRemote;
+
+$rOpt_timeout = 5 if ! defined $rOpt_timeout;
+
+rOpen() || goto error;
+rLogin($rOpt_timeout) || goto error;
+
+rCommandAsync("$rOpt_cmd ", 15) || goto error;
+
+rLogout($rOpt_timeout) || goto error;
+
+rClose();
+exit($V6evalRemote::exitPass);
+
+error:
+    rClose();
+    exit($V6evalRemote::exitFail);
+
+########################################################################
+
+

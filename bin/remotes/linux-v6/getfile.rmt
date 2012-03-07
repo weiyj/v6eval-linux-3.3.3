@@ -1,0 +1,23 @@
+#!/usr/bin/perl
+
+use V6evalRemote;
+
+$rOpt_timeout = 5 if ! defined $rOpt_timeout;
+
+rOpen() || goto error;
+rLogin($rOpt_timeout) || goto error;
+
+rGetfile("$rOpt_from", "$rOpt_to", $rOpt_timeout) || goto error;
+
+rLogout($rOpt_timeout) || goto error;
+
+rClose();
+exit($V6evalRemote::exitPass);
+
+error:
+    rClose();
+    exit($V6evalRemote::exitFail);
+
+########################################################################
+
+

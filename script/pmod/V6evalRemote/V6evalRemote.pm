@@ -81,12 +81,11 @@ $dummy_prompt='DUMMY_PROMPT';
 	     rRebootAsync
 	     rReboot
 	     rPutfile
+	     rGetfile
 	     rInit
 	     rShutdown
 	     rArg
 	     );
-
-my %storedSIG	= ();
 
 ########################################################################
 
@@ -100,12 +99,6 @@ $exitFatal=64;		# FATAL
 ########################################################################
 BEGIN
 {
-	%storedSIG = %SIG;
-
-	foreach my $key (keys(%SIG)) {
-		$SIG{$key} = 'DEFAULT';
-	}
-
     $SIG{CHLD}=\&_sigchld_handler;
     $SIG{INT}=\&_sig_handler;
     $SIG{TERM}=\&_sig_handler;
@@ -125,369 +118,319 @@ BEGIN
 
     # login prompt
     %prompt_user = (
+		    'kame-freebsd',	'login: ',
+		    'freebsd43-i386',	'login: ',
+		    'hitachi-nr60',	'login:',
+		    'hitachi-nr60-v2',	'login:',
+		    'hitachi-gr2k',	'login:',
+		    'hitachi-gr2k-beta',	'login:',
+		    'nec-libra',	'login: ',
+		    'nec-libra-utcpip',	'login: ',
+		    'nec-mip6',		'login: ',
+		    'nec-ix1k',		'login: ',
+		    'sfc-mip6',		'login: ',
+		    'yamaha-ws-one',	'(starts|Yamaha Corporation)',
+		    'linux-v6',		'login: ',
+		    'sun-solaris',	'login: ',
+		    'ms-win2k',		'Login: ',
+		    'cisco-ios',	'get started',
+		    'iij-seil',		'login: ',
+		    'telebit-tbc2k',	'Username:',
+		    'mgcs-sj6',		'login: ',
+		    'netbsd-i386',	'login: ',
+		    'kame-netbsd-i386',	'login: ',
+		    'freebsd-i386',	'login: ',
+		    'openbsd-i386',	'login: ',
+		    'aix',		'login: ',
+		    'hpux',		'login: ',
+		    'usagi-i386',	'login: ',
+		    'usagi24-i386',	'login: ',
+		    'mipl',		'login: ',
+		    'lcna',		'login: ',
+		    'ttb3010',		'login: ',
+		    'unitedlinux',		'login: ',
+		    'suselinux',		'login: ',
 		   );
-#    %prompt_user = (
-#		    'kame-freebsd',	'login: ',
-#		    'freebsd43-i386',	'login: ',
-#		    'hitachi-nr60',	'login:',
-#		    'hitachi-nr60-v2',	'login:',
-#		    'hitachi-gr2k',	'login:',
-#		    'hitachi-gr2k-beta',	'login:',
-#		    'nec-libra',	'login: ',
-#		    'nec-libra-utcpip',	'login: ',
-#		    'nec-mip6',		'login: ',
-#		    'nec-ix1k',		'login: ',
-#		    'sfc-mip6',		'login: ',
-#		    'yamaha-ws-one',	'(starts|Yamaha Corporation)',
-#		    'linux-v6',		'login: ',
-#		    'sun-solaris',	'login: ',
-#		    'ms-win2k',		'Login: ',
-#		    'cisco-ios',	'get started',   
-#		    'iij-seil',		'login: ',
-#		    'telebit-tbc2k',	'Username:',
-#		    'mgcs-sj6',		'login: ',
-#		    'netbsd-i386',	'login: ',
-#		    'kame-netbsd-i386',	'login: ',
-#		    'freebsd-i386',	'login: ',
-#		    'openbsd-i386',	'login: ',
-#		    'aix',		'login: ',
-#		    'hpux',		'login: ',
-#		    'usagi-i386',	'login: ',
-#		    'usagi24-i386',	'login: ',
-#		    'mipl',		'login: ',
-#		    'lcna',		'login: ',
-#		    'ttb3010',		'login: ',
-#		    'unitedlinux',		'login: ',
-#		    'suselinux',		'login: ',
-#		   );
 
     # password prompt
     %prompt_password = (
+			'kame-freebsd',		'Password:',
+			'freebsd43-i386',	'Password:',
+			'hitachi-nr60',		'Password:',
+			'hitachi-nr60-v2',	'Password:',
+			'hitachi-gr2k',		'Password:',
+			'hitachi-gr2k-beta',	'Password:',
+			'nec-libra',		'Password:',
+			'nec-libra-utcpip',	'Password:',
+			'nec-mip6',		'Password:',
+			'nec-ix1k',		'Password:',
+			'sfc-mip6',		'Password:',
+			'yamaha-ws-one',	'Password:',
+			'linux-v6',		'Password: ',
+			'sun-solaris',		'Password:',
+			'ms-win2k',		'Password:',
+			'cisco-ios',		'Password:',
+			'iij-seil',		'DUMMY_PROMPT',	# dummy
+			'telebit-tbc2k',	'Password:',
+			'mgcs-sj6',		'Password:',
+			'netbsd-i386',		'Password:',
+			'kame-netbsd-i386',	'Password:',
+			'freebsd-i386',		'Password:',
+			'openbsd-i386',		'Password:',
+			'aix',			'Password:',
+			'hpux',			'Password:',
+			'usagi-i386',		'Password: ',
+			'usagi24-i386',		'Password: ',
+			'mipl',			'Password: ',
+			'lcna',			'Password:',
+			'ttb3010',		'Password:',
+			'unitedlinux',		'Password: ',
+			'suselinux',		'Password: ',
 			);
-#    %prompt_password = (
-#			'kame-freebsd',		'Password:',
-#			'freebsd43-i386',	'Password:',
-#			'hitachi-nr60',		'Password:',
-#			'hitachi-nr60-v2',	'Password:',
-#			'hitachi-gr2k',		'Password:',
-#			'hitachi-gr2k-beta',	'Password:',
-#			'nec-libra',		'Password:',
-#			'nec-libra-utcpip',	'Password:',
-#			'nec-mip6',		'Password:',
-#			'nec-ix1k',		'Password:',
-#			'sfc-mip6',		'Password:',
-#			'yamaha-ws-one',	'Password:',
-#			'linux-v6',		'Password: ',
-#			'sun-solaris',		'Password:',
-#			'ms-win2k',		'Password:',
-#			'cisco-ios',		'Password:',
-#			'iij-seil',		'DUMMY_PROMPT',	# dummy
-#			'telebit-tbc2k',	'Password:',
-#			'mgcs-sj6',		'Password:',
-#			'netbsd-i386',		'Password:',
-#			'kame-netbsd-i386',	'Password:',
-#			'freebsd-i386',		'Password:',
-#			'openbsd-i386',		'Password:',
-#			'aix',			'Password:',
-#			'hpux',			'Password:',
-#			'usagi-i386',		'Password: ',
-#			'usagi24-i386',		'Password: ',
-#			'mipl',			'Password: ',
-#			'lcna',			'Password:',
-#			'ttb3010',		'Password:',
-#			'unitedlinux',		'Password: ',
-#			'suselinux',		'Password: ',
-#			);
 
     # command prompt
     %prompt_command = (
+		       'kame-freebsd',		'(\$|#) ',
+		       'freebsd43-i386',	'(\$|#) ',
+		       'hitachi-nr60',		'% ',
+		       'hitachi-nr60-v2',	'% ',
+		       'hitachi-gr2k',		'(command|admin)(:|>) ',
+		       'hitachi-gr2k-beta',	'(command|admin): ',
+		       'nec-libra',		'(\$|#) ',
+		       'nec-libra-utcpip',	'(\$|#) ',
+		       'nec-mip6',		'(\$|#) ',
+		       'nec-ix1k',		'(\$|#) ',
+		       'sfc-mip6',		'(\$|#) ',
+		       'yamaha-ws-one',		'(>|#) ',
+		       'linux-v6',		'# ',
+		       'sun-solaris',		'# ',
+		       'ms-win2k',		'.:.>',
+		       'cisco-ios',		'(>|#)',
+		       'iij-seil',		'\r(>|#) ',
+		       'telebit-tbc2k',		'(> |% |accepted)',
+		       'mgcs-sj6',		'(\$|#) ',
+		       'netbsd-i386',		'(\$|#) ',
+		       'kame-netbsd-i386',	'(\$|#) ',
+		       'freebsd-i386',		'(\$|#) ',
+		       'openbsd-i386',		'(\$|#) ',
+		       'aix',			'(\$|#) ',
+		       'hpux',			'(\$|#) ',
+		       'usagi-i386',		'# ',
+		       'usagi24-i386',		'# ',
+		       'mipl',			'# ',
+		       'lcna',			'(\$|#) ',
+		       'ttb3010',		'(>|#) ',
+		       'unitedlinux',	'# ',
+		       'suselinux',	'# ',
 		       );
-#    %prompt_command = (
-#		       'kame-freebsd',		'(\$|#) ',
-#		       'freebsd43-i386',	'(\$|#) ',
-#		       'hitachi-nr60',		'% ',
-#		       'hitachi-nr60-v2',	'% ',
-#		       'hitachi-gr2k',		'(command|admin)(:|>) ',
-#		       'hitachi-gr2k-beta',	'(command|admin): ',
-#		       'nec-libra',		'(\$|#) ',
-#		       'nec-libra-utcpip',	'(\$|#) ',
-#		       'nec-mip6',		'(\$|#) ',
-#		       'nec-ix1k',		'(\$|#) ',
-#		       'sfc-mip6',		'(\$|#) ',
-#		       'yamaha-ws-one',		'(>|#) ',
-#		       'linux-v6',		'# ',
-#		       'sun-solaris',		'# ',
-#		       'ms-win2k',		'.:.>',
-#		       'cisco-ios',		'(>|#)',
-#		       'iij-seil',		'\r(>|#) ',
-#		       'telebit-tbc2k',		'(> |% |accepted)',
-#		       'mgcs-sj6',		'(\$|#) ',
-#		       'netbsd-i386',		'(\$|#) ',
-#		       'kame-netbsd-i386',	'(\$|#) ',
-#		       'freebsd-i386',		'(\$|#) ',
-#		       'openbsd-i386',		'(\$|#) ',
-#		       'aix',			'(\$|#) ',
-#		       'hpux',			'(\$|#) ',
-#		       'usagi-i386',		'# ',
-#		       'usagi24-i386',		'# ',
-#		       'mipl',			'# ',
-#		       'lcna',			'(\$|#) ',
-#		       'ttb3010',		'(>|#) ',
-#		       'unitedlinux',	'# ',
-#		       'suselinux',	'# ',
-#		       );
 
     # command of the admin mode if any
     %cmd_admin = (
+		  'hitachi-gr2k',  'admin',
+		  'hitachi-gr2k-beta',  'admin',
+		  'yamaha-ws-one', 'administrator',
+		  'cisco-ios',     'enable',
+		  'iij-seil',      '!sh',
+		  'telebit-tbc2k', "\esystem",
+		  'ttb3010', 	'config',
 		  );
-#    %cmd_admin = (
-#		  'hitachi-gr2k',  'admin',
-#		  'hitachi-gr2k-beta',  'admin',
-#		  'yamaha-ws-one', 'administrator',
-#		  'cisco-ios',     'enable',
-#		  'iij-seil',      '!sh',
-#		  'telebit-tbc2k', "\esystem",
-#		  'ttb3010', 	'config',
-#		  );
 
     # another command of the admin mode if any
     %cmd_admin2 = (
+		   'telebit-tbc2k', "\epaxtcl0\r",
 		   );
-#    %cmd_admin2 = (
-#		   'telebit-tbc2k', "\epaxtcl0\r",
-#		   );
 
     # logout command
     %cmd_exit = (
+		 'kame-freebsd',	'exit',
+		 'freebsd43-i386',	'exit',
+		 'hitachi-nr60',	'exit',
+		 'hitachi-nr60-v2',	'exit',
+		 'hitachi-gr2k',	'exit',
+		 'hitachi-gr2k-beta',	'exit',
+		 'nec-libra',		'exit',
+		 'nec-libra-utcpip',	'exit',
+		 'nec-mip6',		'exit',
+		 'nec-ix1k',		'exit',
+		 'sfc-mip6',		'exit',
+		 'yamaha-ws-one',	'exit',
+		 'linux-v6',		'exit',
+		 'sun-solaris',		'exit',
+		 'ms-win2k',		'exit',
+		 'cisco-ios',		'exit',
+		 'iij-seil',		'exit',
+		 'telebit-tbc2k',	"\elogout\r",
+		 'mgcs-sj6',		'exit',
+		 'netbsd-i386',		'exit',
+		 'kame-netbsd-i386',	'exit',
+		 'freebsd-i386',	'exit',
+		 'openbsd-i386',	'exit',
+		 'aix',			'exit',
+		 'hpux',		'exit',
+		 'usagi-i386',		'exit',
+		 'usagi24-i386',	'exit',
+		 'mipl',		'exit',
+		 'lcna',		'exit',
+		 'ttb3010',		'logout',
+		 'unitedlinux',		'exit',
+		 'suselinux',		'exit',
 		 );
-#    %cmd_exit = (
-#		 'kame-freebsd',	'exit',
-#		 'freebsd43-i386',	'exit',
-#		 'hitachi-nr60',	'exit',
-#		 'hitachi-nr60-v2',	'exit',
-#		 'hitachi-gr2k',	'exit',
-#		 'hitachi-gr2k-beta',	'exit',
-#		 'nec-libra',		'exit',
-#		 'nec-libra-utcpip',	'exit',
-#		 'nec-mip6',		'exit',
-#		 'nec-ix1k',		'exit',
-#		 'sfc-mip6',		'exit',
-#		 'yamaha-ws-one',	'exit',
-#		 'linux-v6',		'exit',
-#		 'sun-solaris',		'exit',
-#		 'ms-win2k',		'exit',
-#		 'cisco-ios',		'exit',
-#		 'iij-seil',		'exit',
-#		 'telebit-tbc2k',	"\elogout\r",
-#		 'mgcs-sj6',		'exit',
-#		 'netbsd-i386',		'exit',
-#		 'kame-netbsd-i386',	'exit',
-#		 'freebsd-i386',	'exit',
-#		 'openbsd-i386',	'exit',
-#		 'aix',			'exit',
-#		 'hpux',		'exit',
-#		 'usagi-i386',		'exit',
-#		 'usagi24-i386',	'exit',
-#		 'mipl',		'exit',
-#		 'lcna',		'exit',
-#		 'ttb3010',		'logout',
-#		 'unitedlinux',		'exit',
-#		 'suselinux',		'exit',
-#		 );
 
     # confirmation for logout
     %prompt_exit_confirm = (
+			    'ms-win2k',	'ENTER',
 			    );
-#    %prompt_exit_confirm = (
-#			    'ms-win2k',	'ENTER',
-#			    );
 
     # reply of the confirmation for logout
     %reply_exit_confirm = (
+			   'ms-win2k',		"\r",
 			   );
-#    %reply_exit_confirm = (
-#			   'ms-win2k',		"\r",
-#			   );
 
     # command for initialize
     %cmd_init = (
+		  'ttb3010', 	'init all',
 		  );
-#    %cmd_init = (
-#		  'ttb3010', 	'init all',
-#		  );
 
     # confirmation for Initialize
     %prompt_init_confirm = (
+			    'ttb3010',	"y/n",
 			    );
-#    %prompt_init_confirm = (
-#			    'ttb3010',	"y/n",
-#			    );
 
     # reply of the confirmation for Initialize
     %reply_init_confirm = (
+			   'ttb3010',	"y",
 			   );
-#    %reply_init_confirm = (
-#			   'ttb3010',	"y",
-#			   );
 
     # command for shutdown
     %cmd_shutdown = (
+		  'ttb3010', 	"shutdown",
 		  );
-#    %cmd_shutdown = (
-#		  'ttb3010', 	"shutdown",
-#		  );
 
     # confirmation for Initialize
     %prompt_shutdown_confirm = (
+			    # TTB asks [y/n]
+			    'ttb3010',	"y/n",
 			    );
-#    %prompt_shutdown_confirm = (
-#			    # TTB asks [y/n]
-#			    'ttb3010',	"y/n",
-#			    );
 
     # reply of the confirmation for Initialize
     %reply_shutdown_confirm = (
+			   'ttb3010',		"y",
 			   );
-#    %reply_shutdown_confirm = (
-#			   'ttb3010',		"y",
-#			   );
 
 
     # reboot command
     %cmd_reboot = (
+		   'kame-freebsd',	'reboot',
+		   'freebsd43-i386',	'reboot',
+		   'hitachi-nr60',	'reboot',
+		   'hitachi-nr60-v2',	'reboot',
+		   'hitachi-gr2k',	'boot -nf',
+		   'hitachi-gr2k-beta',	'boot -nf',
+		   'nec-libra',		'reboot',
+		   'nec-libra-utcpip',	'reboot',
+		   'nec-mip6',		'reboot',
+		   'nec-ix1k',		'reload y',
+		   'sfc-mip6',		'reboot',
+		   'yamaha-ws-one',	'restart',
+		   'linux-v6',		'reboot',
+		   'sun-solaris',	'reboot',
+		   # ms-win2k
+		   'cisco-ios',		'reload',
+		   'iij-seil',		'reboot',
+		   'telebit-tbc2k',	'restart',
+		   'mgcs-sj6',		'reboot',
+		   'netbsd-i386',	'reboot',
+		   'kame-netbsd-i386',	'reboot',
+		   'freebsd-i386',	'reboot',
+		   'openbsd-i386',	'reboot',
+		   'aix',		'reboot',
+		   'hpux',		'reboot',
+		   'usagi-i386',	'reboot',
+		   'usagi24-i386',	'reboot',
+		   'mipl',		'reboot',
+		   'lcna',		'reboot',
+		   'ttb3010',		'reboot',
+		   'unitedlinux',	'reboot',
+		   'suselinux',		'reboot',
 		   );
-#    %cmd_reboot = (
-#		   'kame-freebsd',	'reboot',
-#		   'freebsd43-i386',	'reboot',
-#		   'hitachi-nr60',	'reboot',
-#		   'hitachi-nr60-v2',	'reboot',
-#		   'hitachi-gr2k',	'boot -nf',
-#		   'hitachi-gr2k-beta',	'boot -nf',
-#		   'nec-libra',		'reboot',
-#		   'nec-libra-utcpip',	'reboot',
-#		   'nec-mip6',		'reboot',
-#		   'nec-ix1k',		'reload y',
-#		   'sfc-mip6',		'reboot',
-#		   'yamaha-ws-one',	'restart',
-#		   'linux-v6',		'reboot',
-#		   'sun-solaris',	'reboot',
-#		   # ms-win2k
-#		   'cisco-ios',		'reload',
-#		   'iij-seil',		'reboot',
-#		   'telebit-tbc2k',	'restart',
-#		   'mgcs-sj6',		'reboot',
-#		   'netbsd-i386',	'reboot',
-#		   'kame-netbsd-i386',	'reboot',
-#		   'freebsd-i386',	'reboot',
-#		   'openbsd-i386',	'reboot',
-#		   'aix',		'reboot',
-#		   'hpux',		'reboot',
-#		   'usagi-i386',	'reboot',
-#		   'usagi24-i386',	'reboot',
-#		   'mipl',		'reboot',
-#		   'lcna',		'reboot',
-#		   'ttb3010',		'reboot',
-#		   'unitedlinux',	'reboot',
-#		   'suselinux',		'reboot',
-#		   );
 
     # final confirmation for reboot if any
     %prompt_reboot_confirm = (
+			      'ms-win2k',	'ENTER',
+			      # Proceed with reload? [confirm]
+			      'cisco-ios',	'confirm',
+			      # Proceed with init? [y/n]
+			      'ttb3010',	'y/n',
 			      );
-#    %prompt_reboot_confirm = (
-#			      'ms-win2k',	'ENTER',
-#			      # Proceed with reload? [confirm]
-#			      'cisco-ios',	'confirm',
-#			      # Proceed with init? [y/n]
-#			      'ttb3010',	'y/n',
-#			      );
 
     # reply of the final confirmation for reboot
     %reply_reboot_confirm = (
+			     'ms-win2k',	"\r",
+			     'cisco-ios',	'y',
+			     'ttb3010',		'y',
 			     );
-#    %reply_reboot_confirm = (
-#			     'ms-win2k',	"\r",
-#			     'cisco-ios',	'y',
-#			     'ttb3010',		'y',
-#			     );
 
     # pre-final confirmation for reboot if any
     %prompt_reboot_confirm2 = (
+			       # System configuration has been modified.
+			       # Save? [yes/no]:
+			      'cisco-ios',	'yes/no',
 			      );
-#    %prompt_reboot_confirm2 = (
-#			       # System configuration has been modified.
-#			       # Save? [yes/no]:
-#			      'cisco-ios',	'yes/no',
-#			      );
 
     # reply of the pre-final confirmation for reboot
     %reply_reboot_confirm2 = (
+			     'cisco-ios',	"no\r",
 			     );
-#    %reply_reboot_confirm2 = (
-#			     'cisco-ios',	"no\r",
-#			     );
 
     # final confirmation for shutdown if any
     %prompt_shutdown_confirm = (
+			      # Proceed with init? [y/n]
+			      'ttb3010',	'y/n',
 			      );
-#    %prompt_shutdown_confirm = (
-#			      # Proceed with init? [y/n]
-#			      'ttb3010',	'y/n',
-#			      );
 
     # reply of the final confirmation for reboot
     %reply_shutdown_confirm = (
+			     'ttb3010',		'y',
 			     );
-#    %reply_shutdown_confirm = (
-#			     'ttb3010',		'y',
-#			     );
 
     # command for reading command status
     %cmd_status = (
+		   'kame-freebsd',	'echo $status',
+		   'freebsd43-i386',	'echo $status',
+		   'hitachi-nr60',	'echo $status',
+		   'hitachi-nr60-v2',	'echo $status',
+		   'hitachi-gr2k',	'echo $status',
+		   'hitachi-gr2k-beta',	'echo $status',
+		   'nec-libra',		'echo $status',
+		   'nec-libra-utcpip',	'echo $status',
+		   'nec-mip6',		'echo $status',
+		   'sfc-mip6',		'echo $status',
+		   'linux-v6',		'echo $?',
+		   'sun-solaris',	'echo $?',
+		   # ms-win2k
+		   # cisco-ios
+		   # iij-seil
+		   # ttb3010
+		   'mgcs-sj6',		'echo $status',
+		   'netbsd-i386',	'echo $status',
+		   'kame-netbsd-i386',	'echo $status',
+		   'freebsd-i386',	'echo $status',
+		   'openbsd-i386',	'echo $status',
+		   'aix',		'echo $?',
+		   'hpux',		'echo $?',
+		   'usagi-i386',	'echo $?',
+		   'usagi24-i386',	'echo $?',
+		   'mipl',		'echo $?',
+		   'lcna',		'echo $status',
+		   'unitedlinux',	'echo $?',
+		   'suselinux',	'echo $?',
 		   );
-#    %cmd_status = (
-#		   'kame-freebsd',	'echo $status',
-#		   'freebsd43-i386',	'echo $status',
-#		   'hitachi-nr60',	'echo $status',
-#		   'hitachi-nr60-v2',	'echo $status',
-#		   'hitachi-gr2k',	'echo $status',
-#		   'hitachi-gr2k-beta',	'echo $status',
-#		   'nec-libra',		'echo $status',
-#		   'nec-libra-utcpip',	'echo $status',
-#		   'nec-mip6',		'echo $status',
-#		   'sfc-mip6',		'echo $status',
-#		   'linux-v6',		'echo $?',
-#		   'sun-solaris',	'echo $?',
-#		   # ms-win2k
-#		   # cisco-ios
-#		   # iij-seil
-#		   # ttb3010
-#		   'mgcs-sj6',		'echo $status',
-#		   'netbsd-i386',	'echo $status',
-#		   'kame-netbsd-i386',	'echo $status',
-#		   'freebsd-i386',	'echo $status',
-#		   'openbsd-i386',	'echo $status',
-#		   'aix',		'echo $?',
-#		   'hpux',		'echo $?',
-#		   'usagi-i386',	'echo $?',
-#		   'usagi24-i386',	'echo $?',
-#		   'mipl',		'echo $?',
-#		   'lcna',		'echo $status',
-#		   'unitedlinux',	'echo $?',
-#		   'suselinux',	'echo $?',
-#		   );
 }
 
 ########################################################################
 END
 {
     rClose();
-
-	foreach my $key (keys(%SIG)) {
-		$SIG{$key} = 'DEFAULT';
-	}
-
-	%SIG = %storedSIG;
 }
 
 ########################################################################
@@ -1245,6 +1188,44 @@ sub rPutfile($$$)
 	goto error;
     }
     print STDERR "rPutfile: Copying completed\n" if $debug;
+
+    #
+    #
+    #
+    return(1);
+
+error:
+    return(0);
+}
+
+########################################################################
+sub rGetfile($$$)
+{
+    my($from, $to, $timeout)=@_;
+
+    setTipVar($timeout, 'echocheck') || goto error;
+    print STDERR "rGetfile: Starting copying\n" if $debug;
+
+	unless(get_prompt($timeout)) {
+		goto error;
+	}
+
+	sendMessages("~t");
+	sendMessages("$from $to");
+
+	unless(get_prompt($timeout)) {
+		goto error;
+	}
+    #
+    #
+    #
+    sendMessages("\r"); # it's important if prompt pattern is ``^(>|#) ''
+#   if($Remote->expect($timeout, '-re', "$prompt_command{$Type}") == undef) {
+    if(!defined $Remote->expect($timeout, '-re', "$prompt_command{$Type}")) {
+	print STDERR "Never sync with copy\n";
+	goto error;
+    }
+    print STDERR "rGetfile: Copying completed\n" if $debug;
 
     #
     #
