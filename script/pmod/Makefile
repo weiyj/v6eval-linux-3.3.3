@@ -1,4 +1,4 @@
-SUBDIRS = V6evalTool V6evalRemote V6evalCommon
+SUBDIRS = IO-Tty IO-Stty Expect V6evalTool V6evalRemote V6evalCommon
 
 .PHONY: all clean install
 all clean install:

@@ -1,0 +1,288 @@
+
+
+
+STTY(1)                                                   STTY(1)
+
+
+NAME
+       stty - change and print terminal line settings
+
+SYNOPSIS
+       stty [setting...]
+       stty {-a,-g,-v,--version}
+
+DESCRIPTION
+
+       This is the PERL POSIX compliant stty. This 'man' page is a
+       hacked to hell version of the GNU stty page with all the
+       non-POSIX crap stripped out. I suppose if someone really
+       wanted to bitch about some obscure copyright issues I
+       could write my own but I almost died of boredom just
+       writing the module.
+
+       stty  accepts  the  following  non-option  arguments  that
+       change  aspects  of  the terminal line operation.  A `[-]'
+       before a capability means that it can  be  turned  off  by
+       preceding it with a `-'.
+
+       Control settings:
+
+
+       [-]parenb
+              Generate parity bit in output and expect parity bit
+              in input.
+
+       [-]parodd
+              Set odd parity (even with `-').
+
+       cs5 cs6 cs7 cs8
+              Set character size to 5, 6, 7, or 8 bits.
+
+       [-]hupcl [-]hup
+              Send a hangup signal when the last  process  closes
+              the tty.
+
+       [-]cstopb
+              Use two stop bits per character (one with `-').
+
+       [-]cread
+              Allow input to be received.
+
+       [-]clocal
+              Disable modem control signals.
+
+
+                    PERL Shell Utilities                      1
+
+
+
+
+
+STTY(1)                                                   STTY(1)
+
+
+       Input settings:
+
+
+       [-]ignbrk
+              Ignore break characters.
+
+       [-]brkint
+              Breaks cause an interrupt signal.
+
+       [-]ignpar
+              Ignore characters with parity errors.
+
+       [-]parmrk
+              Mark   parity   errors   (with   a  255-0-character
+              sequence).
+
+       [-]inpck
+              Enable input parity checking.
+
+       [-]istrip
+              Clear high (8th) bit of input characters.
+
+       [-]inlcr
+              Translate newline to carriage return.
+
+       [-]igncr
+              Ignore carriage return.
+
+       [-]icrnl
+              Translate carriage return to newline.
+
+       [-]ixon
+              Enable XON/XOFF flow control.
+
+       [-]ixoff
+              Enable sending of stop character  when  the  system
+              input  buffer  is  almost full, and start character
+              when it becomes almost empty again.
+
+
+       Output settings:
+
+
+
+
+
+
+                    PERL Shell Utilities                      2
+
+
+
+
+
+STTY(1)                                                   STTY(1)
+
+
+       [-]opost
+              Postprocess output.
+
+
+       Local settings:
+
+
+       [-]isig
+              Enable interrupt, quit, and suspend special charac-
+              ters.
+
+       [-]icanon
+              Enable erase, kill, werase, and rprnt special char-
+              acters.
+
+
+
+                    PERL Shell Utilities                      3
+
+
+
+
+
+STTY(1)                                                   STTY(1)
+
+
+       [-]echo
+              Echo input characters.
+
+       [-]echoe, [-]crterase
+              Echo erase characters as backspace-space-backspace.
+
+       [-]echok
+              Echo a newline after a kill character.
+
+       [-]echonl
+              Echo newline even if not echoing other  characters.
+
+       [-]noflsh
+              Disable  flushing  after interrupt and quit special
+              characters.
+
+       # Thoough this claims non-posixhood it is supported by the perl
+       # POSIX.pm.
+       [-]tostop (np)
+              Stop background jobs that try to write to the  ter-
+              minal.
+
+       Combination settings:
+
+
+                    PERL Shell Utilities                      4
+
+
+
+
+
+STTY(1)                                                   STTY(1)
+
+
+       ek     Reset  the  erase  and  kill  special characters to
+              their default values.
+
+       sane   Same as cread -ignbrk brkint  -inlcr  -igncr  icrnl
+              -ixoff  opost
+              isig icanon echo echoe echok -echonl
+              -noflsh -tostop
+              also  sets  all special characters to their default
+              values.
+
+       [-]cooked
+              Same as brkint ignpar istrip icrnl ixon opost  isig
+              icanon,  plus  sets  the  eof and eol characters to
+              their default values if they are the  same  as  the
+              min and time characters.  With `-', same as raw.
+
+       [-]raw Same  as  -ignbrk  -brkint  -ignpar  -parmrk -inpck
+              -istrip -inlcr -igncr -icrnl  -ixon  -ixoff
+              -opost -isig -icanon min 1
+              time 0.  With `-', same as cooked.
+
+       [-]pass8
+              Same as -parenb -istrip cs8.   With  `-',  same  as
+              parenb istrip cs7.
+
+       dec    Same as echoe echoctl echoke -ixany, and also  sets
+              the interrupt special character to Ctrl-C, erase to
+              Del, and kill to Ctrl-U.
+
+       Special characters:
+
+
+       The special characters' default values vary from system to
+
+
+
+                    PERL Shell Utilities                      5
+
+
+
+
+
+STTY(1)                                                   STTY(1)
+
+
+       system.   They are set with the syntax `name value', where
+       the names are listed below and  the  value  can  be  given
+       either literally, in hat notation (`^c'), or as an integer
+       which may start with `0x' to indicate hexadecimal, `0'  to
+       indicate  octal,  or  any other digit to indicate decimal.
+       Giving a value of `^-' or `undef'  disables  that  special
+       character.
+
+
+       intr   Send an interrupt signal.
+
+       quit   Send a quit signal.
+
+       erase  Erase the last character typed.
+
+       kill   Erase the current line.
+
+       eof    Send an end of file (terminate the input).
+
+       eol    End the line.
+
+       start  Restart the output after stopping it.
+
+       stop   Stop the output.
+
+       susp   Send a terminal stop signal.
+
+       Special settings:
+
+
+       min N  Set the minimum number of characters that will sat-
+              isfy a read until the time value has expired,  when
+              -icanon is set.
+
+
+                    PERL Shell Utilities                      6
+
+STTY(1)                                                   STTY(1)
+
+
+       time N Set  the  number of tenths of a second before reads
+              time out if the min number of characters  have  not
+              been read, when -icanon is set.
+
+       N      Set the input and output speeds to N.  N can be one
+              of: 0 50 75 110 134 134.5 150 200 300 600 1200 1800
+              2400 4800 9600 19200 38400 exta extb.  exta is  the
+              same  as 19200; extb is the same as 38400.  0 hangs
+              up the line if -clocal is set.
+
+   OPTIONS
+       -a
+              Print all current settings in human-readable  form.
+
+       -g
+              Print all current settings in a form  that  can  be
+              used  as  an  argument  to  another stty command to
+              restore the current settings.
+
+       -v,--version
+
+              Print version info.
+
+                    PERL Shell Utilities                      7
