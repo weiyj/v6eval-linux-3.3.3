@@ -1594,9 +1594,9 @@ parseArgs()
 	$Trace	    = $opt_trace ? $opt_trace : 0;
 	$KeepImd    = $opt_keepImd ? $opt_keepImd : 0;
 	$TnDef  = $opt_tn    ? $opt_tn  : "tn.def";
-	$TnDef  = searchPath("${SeqDir}:./:${V6Root}/etc/", $TnDef); 
+	$TnDef  = searchPath("${SeqDir}:${SeqDir}/../:${SeqDir}/../etc/:./:${V6Root}/etc/", $TnDef); 
 	$NutDef = $opt_nut   ? $opt_nut : "nut.def";
-	$NutDef  = searchPath("${SeqDir}:./:${V6Root}/etc/", $NutDef); 
+	$NutDef  = searchPath("${SeqDir}:${SeqDir}/../:${SeqDir}/../etc/:./:${V6Root}/etc/", $NutDef); 
 	$PktDef = $opt_pkt   ? $opt_pkt : "${SeqDir}packet.def";
 	$TestTitle= $opt_ti   ? $opt_ti : "${SeqName}";
 	$LogFile= $opt_log   ? $opt_log : "${SeqDir}${SeqName}.log";
