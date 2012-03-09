@@ -103,6 +103,8 @@ $exitSpecialOnly=6;	# Special Only
 $exitExceptHost=7;	# Except Host
 $exitExceptRouter=8;	# Except Router
 $exitExceptSpecial=9;	# Except Special
+$exitIPv4Only=14;	# IPv4 Only
+$exitIPv6Only=15;	# IPv6 Only
 $exitSkip=10;		# Skip
 $exitTypeMismatch=11;	# Type Mismatch
 

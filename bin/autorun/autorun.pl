@@ -673,6 +673,8 @@ sub getStatus($) { my (
 		$result{9} ="<FONT COLOR=\"#00FF00\">Except Special</FONT>";
 		$result{10}="<FONT COLOR=\"#AAAAAA\">SKIP</FONT>";
 		$result{11}="<FONT COLOR=\"#00FF00\">Type Mismatch</FONT>";
+		$result{14} ="<FONT COLOR=\"#00FF00\">IPv4 Only<FONT>";
+		$result{15} ="<FONT COLOR=\"#00FF00\">IPv6 Only</FONT>";
 		$result{32}="<FONT COLOR=\"#FF0000\">FAIL</FONT>";
 		$result{33}="<FONT COLOR=\"#FF0000\">Initialization Fail</FONT>";
 		$result{34}="<FONT COLOR=\"#FF0000\">Cleanup Fail</FONT>";
